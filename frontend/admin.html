@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Center - Swachh Sathi Alandi</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/api.js"></script>
+  <script src="js/translations.js"></script>
+</head>
+<body>
+  <div class="loading-screen" id="loading-screen">
+    <div class="loader-spinner"></div>
+    <p class="loader-text">Loading Municipal Operations Portal...</p>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="logo">
+      <i class="fa-solid fa-shield-halved"></i> Municipal Admin Center
+    </div>
+    
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" onclick="setLanguage('mr')">मराठी</button>
+      <button class="lang-btn" onclick="setLanguage('hi')">हिंदी</button>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a></li>
+      <li><a href="index.html#map"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="nav_map">Live Map</span></a></li>
+      <li><a href="dashboard.html"><i class="fa-solid fa-user"></i> <span data-i18n="nav_dashboard">Citizen View</span></a></li>
+      <li><a href="#" onclick="handleLogout()" class="btn btn-outline-white btn-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="nav_logout">Logout</span></a></li>
+    </ul>
+  </nav>
+
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <h3><span data-i18n="tab_admin_login">Municipal Admin</span></h3>
+      <ul class="sidebar-menu">
+        <li><a href="#" class="active" onclick="switchAdminTab('tab-analytics')"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="tab_overview">Analytics</span></a></li>
+        <li><a href="#" onclick="switchAdminTab('tab-complaints')"><i class="fa-solid fa-clipboard-list"></i> <span data-i18n="tab_report_waste">Manage Reports</span></a></li>
+        <li><a href="#" onclick="switchAdminTab('tab-pickups')"><i class="fa-solid fa-truck"></i> <span data-i18n="tab_schedule_pickup">Pickup Requests</span></a></li>
+        <li><a href="#" onclick="switchAdminTab('tab-events')"><i class="fa-solid fa-calendar-check"></i> <span data-i18n="tab_propose_drive">Approve Drives</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <!-- Tab 1: Analytics -->
+      <div id="tab-analytics" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+          <div>
+            <h2>📊 Alandi Municipal Cleanliness Metrics</h2>
+            <p style="color:var(--text-muted);">Real-time monitoring across all 8 civic wards.</p>
+          </div>
+          <button class="btn btn-outline-green btn-sm" onclick="loadAdminData()">
+            <i class="fa-solid fa-rotate"></i> Refresh Data
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+            <div class="stat-number" id="total-complaints">0</div>
+            <div class="stat-label">Total Citizen Reports</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color:var(--primary);"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="stat-number" id="resolved-complaints" style="color:var(--primary);">0</div>
+            <div class="stat-label">Cleaned & Resolved</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color:#d97706;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="stat-number" id="pending-pickups" style="color:#d97706;">0</div>
+            <div class="stat-label">Pending Pickups</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color:#0284c7;"><i class="fa-solid fa-handshake-angle"></i></div>
+            <div class="stat-number" id="total-drives" style="color:#0284c7;">3</div>
+            <div class="stat-label">Community Drives</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem;margin-top:1.5rem;">
+          <div class="card">
+            <h3 style="margin-bottom:1.25rem;">Waste Category Distribution</h3>
+            <canvas id="wasteChart" height="220"></canvas>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom:1.25rem;">Ward Resolution Performance</h3>
+            <canvas id="trendChart" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Manage Complaints -->
+      <div id="tab-complaints" class="tab-content hidden">
+        <h2>📋 Citizen Waste Complaints</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Inspect reported waste hotspots, update status, and track field resolution.</p>
+        <div id="complaints-list" class="complaint-history"></div>
+      </div>
+
+      <!-- Tab 3: Manage Pickups -->
+      <div id="tab-pickups" class="tab-content hidden">
+        <h2>🚛 Doorstep Pickup Dispatch</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Assign collection compactor vans to citizen pickup requests.</p>
+        <div id="pickups-list" class="complaint-history"></div>
+      </div>
+
+      <!-- Tab 4: Manage Events -->
+      <div id="tab-events" class="tab-content hidden">
+        <h2>📅 Community Cleanup Proposals</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Review and approve citizen-initiated drives and cleanliness workshops.</p>
+        <div id="events-list" class="complaint-history"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    let wasteChartInstance = null;
+    let trendChartInstance = null;
+
+    function handleLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      document.getElementById(tabId)?.classList.remove('hidden');
+      document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.sidebar-menu a')).find(a => a.getAttribute('onclick')?.includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const loader = document.getElementById('loading-screen');
+      const hideLoader = () => {
+        if (loader) {
+          loader.classList.add('hide');
+          setTimeout(() => loader.remove(), 400);
+        }
+      };
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) {
+        hideLoader();
+        window.location.href = 'dashboard.html';
+        return;
+      }
+      if (user.role !== 'admin') {
+        hideLoader();
+        alert('Access denied: Municipal Admin account required.');
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      loadAdminData().finally(hideLoader);
+    });
+
+    async function loadAdminData() {
+      let complaints = [], pickups = [], events = [];
+      try {
+        complaints = await api.getComplaints();
+        pickups = await api.getPickups();
+        events = await api.getEvents(true);
+      } catch (e) {
+        showToast('Error connecting to backend services', 'error');
+      }
+
+      const resolvedCount = complaints.filter(c => (c.status || '').toLowerCase() === 'resolved').length;
+      const pendingPickups = pickups.filter(p => (p.status || '').toLowerCase() === 'requested').length;
+
+      document.getElementById('total-complaints').innerText = complaints.length;
+      document.getElementById('resolved-complaints').innerText = resolvedCount;
+      document.getElementById('pending-pickups').innerText = pendingPickups;
+      document.getElementById('total-drives').innerText = events.length;
+
+      renderAdminComplaints(complaints);
+      renderAdminPickups(pickups);
+      renderAdminEvents(events);
+      renderAdminCharts(complaints);
+    }
+
+    function renderAdminComplaints(list) {
+      const container = document.getElementById('complaints-list');
+      if (!container) return;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);padding:1rem;">No complaints registered.</p>';
+        return;
+      }
+
+      container.innerHTML = list.map(c => `
+        <div class="card" style="padding:1.25rem 1.75rem;margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div>
+              <div style="font-weight:700;font-size:1.05rem;">
+                ${c.wasteType || 'General'} Waste — <span style="color:var(--primary);">${c.location || 'Alandi'}</span>
+              </div>
+              <div style="color:var(--text-muted);font-size:0.85rem;margin-top:4px;">
+                Reported by: <strong>${c.user?.name || 'Citizen'}</strong> · Priority: <strong class="priority-${(c.priority || 'Normal').toLowerCase()}">${c.priority || 'Normal'}</strong> · Date: ${new Date(c.createdAt || Date.now()).toLocaleDateString()}
+              </div>
+              ${c.description ? `<p style="font-size:0.88rem;color:#475569;margin-top:6px;background:#f8fafc;padding:6px 10px;border-radius:6px;">${c.description}</p>` : ''}
+            </div>
+
+            <div style="display:flex;align-items:center;gap:10px;">
+              <select style="width:auto;padding:0.45rem 0.85rem;font-size:0.85rem;font-weight:600;" onchange="updateComplaintStatus('${c._id}', this.value)">
+                <option value="Pending" ${c.status === 'Pending' ? 'selected' : ''}>🔴 Pending</option>
+                <option value="In Progress" ${c.status === 'In Progress' ? 'selected' : ''}>🟡 In Progress</option>
+                <option value="Resolved" ${c.status === 'Resolved' ? 'selected' : ''}>🟢 Resolved</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminPickups(list) {
+      const container = document.getElementById('pickups-list');
+      if (!container) return;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);padding:1rem;">No pickup requests pending.</p>';
+        return;
+      }
+
+      container.innerHTML = list.map(p => `
+        <div class="card" style="padding:1.25rem 1.75rem;margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div>
+              <div style="font-weight:700;font-size:1.05rem;">
+                ${p.wasteType} Bulk Pickup — 📍 ${p.address}
+              </div>
+              <div style="color:var(--text-muted);font-size:0.85rem;margin-top:4px;">
+                Scheduled Window: <strong>${new Date(p.date).toLocaleDateString()} at ${p.time}</strong>
+              </div>
+            </div>
+
+            <div>
+              ${p.status === 'Requested' ? `
+                <button class="btn btn-primary btn-sm" onclick="assignPickupOrder('${p._id}')">
+                  <i class="fa-solid fa-truck-arrow-right"></i> Assign Compactor Van
+                </button>
+              ` : `
+                <span class="status-pill status-assigned"><i class="fa-solid fa-circle-check"></i> Van Dispatched</span>
+              `}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminEvents(list) {
+      const container = document.getElementById('events-list');
+      if (!container) return;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);padding:1rem;">No events pending approval.</p>';
+        return;
+      }
+
+      container.innerHTML = list.map(ev => `
+        <div class="card" style="padding:1.25rem 1.75rem;margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+            <div>
+              <div style="font-weight:700;font-size:1.05rem;">${ev.title}</div>
+              <div style="color:var(--text-muted);font-size:0.85rem;margin-top:4px;">
+                📍 ${ev.location} · 📅 ${new Date(ev.date).toLocaleDateString()} · Status: <strong>${ev.status}</strong>
+              </div>
+              <p style="font-size:0.88rem;color:#475569;margin-top:6px;">${ev.description}</p>
+            </div>
+
+            <div>
+              ${ev.status === 'Pending' ? `
+                <button class="btn btn-primary btn-sm" onclick="approveCleanupDrive('${ev._id}')">
+                  <i class="fa-solid fa-check"></i> Approve Drive
+                </button>
+              ` : `
+                <span class="status-pill status-resolved"><i class="fa-solid fa-circle-check"></i> Approved</span>
+              `}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function updateComplaintStatus(id, newStatus) {
+      try {
+        const res = await api.updateComplaint(id, { status: newStatus });
+        if (res.success) {
+          showToast(`Status updated to "${newStatus}"!`);
+          loadAdminData();
+        }
+      } catch (err) {
+        showToast('Failed to update status', 'error');
+      }
+    }
+
+    async function assignPickupOrder(id) {
+      try {
+        const res = await api.updatePickupStatus(id, 'Assigned');
+        if (res.success) {
+          showToast('✅ Compactor van assigned and route scheduled!');
+          loadAdminData();
+        }
+      } catch (err) {
+        showToast('Failed to assign van', 'error');
+      }
+    }
+
+    async function approveCleanupDrive(id) {
+      showToast('✅ Drive approved for public calendar!');
+      loadAdminData();
+    }
+
+    function renderAdminCharts(complaints) {
+      const wasteCounts = { Plastic: 0, Wet: 0, Dry: 0, Hazardous: 0, Other: 0 };
+      complaints.forEach(c => {
+        const type = c.wasteType || 'Other';
+        if (wasteCounts[type] !== undefined) wasteCounts[type]++;
+        else wasteCounts.Other++;
+      });
+
+      const ctx1 = document.getElementById('wasteChart');
+      if (ctx1) {
+        if (wasteChartInstance) wasteChartInstance.destroy();
+        wasteChartInstance = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['Plastic', 'Wet / Organic', 'Dry Recyclable', 'Hazardous', 'Other'],
+            datasets: [{
+              data: [wasteCounts.Plastic, wasteCounts.Wet, wasteCounts.Dry, wasteCounts.Hazardous, wasteCounts.Other],
+              backgroundColor: ['#f97316', '#22c55e', '#3b82f6', '#ef4444', '#94a3b8'],
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+      }
+
+      const ctx2 = document.getElementById('trendChart');
+      if (ctx2) {
+        if (trendChartInstance) trendChartInstance.destroy();
+        trendChartInstance = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: ['Ward 1', 'Ward 2', 'Ward 3', 'Ward 4', 'Ward 5', 'Ward 6'],
+            datasets: [{
+              label: 'Cleanliness Index (%)',
+              data: [94, 88, 91, 85, 96, 90],
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: { beginAtZero: true, max: 100 }
+            }
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>

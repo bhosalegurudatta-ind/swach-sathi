@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citizen & Municipal Portal - Swachh Sathi Alandi</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/api.js"></script>
+  <script src="js/translations.js"></script>
+  <style>
+    /* Specialized Login Panel Styling */
+    .auth-wrapper {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+      background: radial-gradient(circle at 50% 10%, #064e3b 0%, #041e15 60%, #02120d 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-bg-blob {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .auth-card {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      width: 100%;
+      max-width: 490px;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .auth-header {
+      background: #062c20;
+      color: #ffffff;
+      padding: 2rem 2rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .auth-header .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      font-size: 1.6rem;
+      margin-bottom: 0.75rem;
+      border: 1.5px solid rgba(52, 211, 153, 0.3);
+    }
+    .auth-header h2 {
+      color: #ffffff;
+      font-size: 1.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .auth-header p {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.9rem;
+    }
+
+    /* Portal Tabs */
+    .portal-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+    }
+    .portal-tab-btn {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .portal-tab-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .auth-body {
+      padding: 2rem;
+    }
+
+    /* Quick Demo Pill Box */
+    .demo-callout {
+      background: #f0fdf4;
+      border: 1.5px dashed #86efac;
+      border-radius: var(--radius-md);
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+    .demo-callout-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #065f46;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .demo-btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .demo-pill {
+      padding: 0.5rem 0.8rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition-fast);
+      border: 1px solid transparent;
+      font-family: inherit;
+    }
+    .demo-pill.citizen {
+      background: #ffffff;
+      color: #065f46;
+      border-color: #a7f3d0;
+    }
+    .demo-pill.citizen:hover {
+      background: #10b981;
+      color: #ffffff;
+    }
+    .demo-pill.admin {
+      background: #ffffff;
+      color: #1e40af;
+      border-color: #bfdbfe;
+    }
+    .demo-pill.admin:hover {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    /* Form Inputs with Icons */
+    .input-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon-wrap i.field-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-subtle);
+      font-size: 0.95rem;
+    }
+    .input-icon-wrap input {
+      padding-left: 42px;
+      padding-right: 42px;
+    }
+    .toggle-pass-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      cursor: pointer;
+      padding: 4px;
+      font-size: 0.95rem;
+      transition: color var(--transition-fast);
+    }
+    .toggle-pass-btn:hover {
+      color: var(--primary);
+    }
+    .form-extras {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .remember-label input {
+      width: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-screen" id="loading-screen">
+    <div class="loader-spinner"></div>
+    <p class="loader-text">Loading Swachh Sathi...</p>
+  </div>
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-leaf"></i> <span data-i18n="brand">Swachh Sathi</span>
+    </a>
+    
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" onclick="setLanguage('mr')">मराठी</button>
+      <button class="lang-btn" onclick="setLanguage('hi')">हिंदी</button>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="nav_home">Home</span></a></li>
+      <li><a href="index.html#map"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="nav_map">Live Map</span></a></li>
+      <li><a href="#" onclick="handleLogout()" id="logout-btn" class="btn btn-outline-white btn-sm hidden"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="nav_logout">Logout</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== ADVANCED LOGIN & AUTHENTICATION PANEL ===== -->
+  <div id="auth-section" class="auth-wrapper">
+    <div class="auth-bg-blob"></div>
+
+    <div class="auth-card">
+      <!-- Branded Header -->
+      <div class="auth-header">
+        <div class="logo-badge"><i class="fa-solid fa-shield-halved"></i></div>
+        <h2 id="auth-title" data-i18n="login_welcome">Welcome to Swachh Sathi</h2>
+        <p id="auth-subtitle" data-i18n="login_subtitle">Access your civic waste management and tracking dashboard</p>
+      </div>
+
+      <div class="auth-body">
+        <!-- Portal Role Selector Tabs -->
+        <div class="portal-tabs" id="role-tabs">
+          <button type="button" class="portal-tab-btn active" id="tab-btn-citizen" onclick="selectPortalRole('citizen')">
+            <i class="fa-solid fa-user"></i> <span data-i18n="tab_citizen_login">Citizen Portal</span>
+          </button>
+          <button type="button" class="portal-tab-btn" id="tab-btn-admin" onclick="selectPortalRole('admin')">
+            <i class="fa-solid fa-shield"></i> <span data-i18n="tab_admin_login">Municipal Admin</span>
+          </button>
+        </div>
+
+        <!-- 1-Click Instant Demo Login Box -->
+        <div class="demo-callout">
+          <div class="demo-callout-title">
+            <i class="fa-solid fa-bolt"></i> <span data-i18n="quick_demo_label">⚡ Instant 1-Click Demo Access:</span>
+          </div>
+          <div class="demo-btn-group">
+            <button type="button" class="demo-pill citizen" onclick="quickDemoLogin('citizen@alandi.in', 'citizen123', 'citizen')">
+              <i class="fa-solid fa-user-check"></i> <span data-i18n="demo_citizen_btn">Citizen Demo</span>
+            </button>
+            <button type="button" class="demo-pill admin" onclick="quickDemoLogin('admin@swachhsathi.in', 'admin123', 'admin')">
+              <i class="fa-solid fa-shield-halved"></i> <span data-i18n="demo_admin_btn">Admin Demo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Feedback Banner -->
+        <div id="auth-error" class="hidden" style="margin-bottom:1.25rem;padding:0.75rem 1rem;background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;color:#991b1b;font-size:0.88rem;display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="auth-error-text">Authentication failed.</span>
+        </div>
+
+        <!-- The Authentication Form -->
+        <form id="auth-form" onsubmit="handleAuth(event)">
+          <!-- Name Input (Registration Mode Only) -->
+          <div id="name-group" style="display:none;" class="form-group">
+            <label data-i18n="lbl_name">Full Name</label>
+            <div class="input-icon-wrap">
+              <i class="fa-solid fa-user field-icon"></i>
+              <input type="text" id="auth-name" placeholder="Aarav Patil">
+            </div>
+          </div>
+
+          <!-- Email Input -->
+          <div class="form-group">
+            <label data-i18n="lbl_email">Email Address</label>
+            <div class="input-icon-wrap">
+              <i class="fa-solid fa-envelope field-icon"></i>
+              <input type="email" id="auth-email" placeholder="citizen@alandi.in" required autocomplete="email">
+            </div>
+          </div>
+
+          <!-- Password Input with Show/Hide Eye Toggle -->
+          <div class="form-group">
+            <label data-i18n="lbl_password">Password</label>
+            <div class="input-icon-wrap">
+              <i class="fa-solid fa-lock field-icon"></i>
+              <input type="password" id="auth-password" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">
+                <i class="fa-solid fa-eye" id="pass-eye-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-extras">
+            <label class="remember-label">
+              <input type="checkbox" id="remember-me" checked>
+              <span data-i18n="remember_me">Remember me on this browser</span>
+            </label>
+          </div>
+
+          <!-- Primary Submit Button -->
+          <button type="submit" class="btn btn-primary" style="width:100%;padding:0.9rem;" id="auth-btn">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> <span data-i18n="btn_login">Login to Dashboard</span>
+          </button>
+        </form>
+
+        <!-- Guest Access Option -->
+        <div style="text-align:center;margin-top:1.25rem;">
+          <button type="button" onclick="continueAsGuest()" style="background:none;border:none;color:var(--text-muted);font-size:0.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;">
+            <i class="fa-solid fa-user-secret"></i> <span data-i18n="guest_btn">Continue as Guest Citizen</span>
+          </button>
+        </div>
+
+        <!-- Mode Toggle Link -->
+        <p class="text-center mt-2" style="font-size:0.88rem;color:var(--text-muted);margin-top:1.25rem;">
+          <a href="#" onclick="toggleAuthMode()" id="auth-toggle" style="color:var(--primary);font-weight:600;" data-i18n="switch_to_register">
+            Don't have an account? Register here
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD MAIN SECTION ===== -->
+  <div id="dashboard-section" class="dashboard-container hidden">
+    <aside class="sidebar">
+      <h3><span id="sidebar-greeting" data-i18n="my_dashboard">My Dashboard</span></h3>
+      <ul class="sidebar-menu">
+        <li><a href="#" class="active" onclick="switchDashboardTab('tab-overview')"><i class="fa-solid fa-chart-line"></i> <span data-i18n="tab_overview">Overview</span></a></li>
+        <li><a href="#" onclick="switchDashboardTab('tab-report')"><i class="fa-solid fa-camera"></i> <span data-i18n="tab_report_waste">Report Waste</span></a></li>
+        <li><a href="#" onclick="switchDashboardTab('tab-pickup')"><i class="fa-solid fa-truck"></i> <span data-i18n="tab_schedule_pickup">Schedule Pickup</span></a></li>
+        <li><a href="#" onclick="switchDashboardTab('tab-events')"><i class="fa-solid fa-calendar-plus"></i> <span data-i18n="tab_propose_drive">Propose Drive</span></a></li>
+      </ul>
+      <div id="admin-link-container" style="margin-top:2rem;"></div>
+    </aside>
+
+    <main class="main-content">
+      <!-- Tab 1: Overview -->
+      <div id="tab-overview" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+          <div>
+            <h2><span data-i18n="welcome_user">Welcome, </span><span id="user-name-display" style="color:var(--primary);">Citizen</span>! 👋</h2>
+            <p style="color:var(--text-muted);" data-i18n="activity_summary">Here is your active waste reporting and pickup summary for Alandi.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="switchDashboardTab('tab-report')">
+            <i class="fa-solid fa-camera"></i> <span data-i18n="tab_report_waste">File New Waste Report</span>
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+            <div class="stat-number" id="my-complaints">0</div>
+            <div class="stat-label" data-i18n="my_complaints">My Waste Reports</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color:#0284c7;"><i class="fa-solid fa-truck"></i></div>
+            <div class="stat-number" id="my-pickups" style="color:#0284c7;">0</div>
+            <div class="stat-label" data-i18n="my_pickups">Doorstep Pickups</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color:#10b981;"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="stat-number" id="my-resolved" style="color:#10b981;">0</div>
+            <div class="stat-label" data-i18n="my_resolved">Resolved Issues</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+            <h3 data-i18n="recent_reports">Recent Waste Reports</h3>
+            <a href="index.html#map" class="btn btn-outline-green btn-sm"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="view_on_map">View on Map</span></a>
+          </div>
+          <div id="my-complaints-list" class="complaint-history">
+            <p style="color:var(--text-muted);padding:1rem 0;">Loading complaint history...</p>
+          </div>
+        </div>
+
+        <div class="card" style="background:linear-gradient(135deg, #f0fdf4, #e0f2fe);border:1px solid #bbf7d0;">
+          <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+            <div style="width:48px;height:48px;border-radius:12px;background:#ffffff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:var(--shadow-sm);">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <div style="flex:1;">
+              <h3 style="margin-bottom:0.25rem;" data-i18n="need_help_title">Need Urgent Assistance or Bulk Pickup?</h3>
+              <p style="color:var(--text-muted);font-size:0.92rem;" data-i18n="need_help_desc">Municipal supervisors and emergency waste squads are reachable 24/7.</p>
+            </div>
+            <a href="tel:+912012345678" class="btn btn-primary btn-sm"><i class="fa-solid fa-phone"></i> <span data-i18n="btn_call_control">Call Control Room</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Report Waste -->
+      <div id="tab-report" class="tab-content hidden">
+        <h2><i class="fa-solid fa-camera" style="color:var(--primary);margin-right:8px;"></i> <span data-i18n="tab_report_waste">File a Waste Report</span></h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Report garbage accumulation, illegal dumping, or overflowing bins in your ward.</p>
+        
+        <div class="card" style="max-width:640px;">
+          <form id="complaint-form" onsubmit="submitComplaint(event)">
+            <div class="form-group">
+              <label data-i18n="lbl_waste_type">Waste Category</label>
+              <select id="comp-type" required>
+                <option value="Plastic" data-i18n="opt_plastic">🟠 Plastic Waste (Bottles, Bags, Wrappers)</option>
+                <option value="Wet" data-i18n="opt_wet">🟢 Wet / Biodegradable / Organic Waste</option>
+                <option value="Dry" data-i18n="opt_dry">🟡 Dry Recyclable / Cardboard / Paper</option>
+                <option value="Hazardous" data-i18n="opt_hazardous">🔴 Hazardous / Broken Glass / Medical</option>
+                <option value="Other" data-i18n="opt_other">⚪ Construction Rubble / Mixed Waste</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="lbl_priority">Priority</label>
+              <select id="comp-priority">
+                <option value="Normal">Normal — Regular cleanup route</option>
+                <option value="High">High — Overflowing onto road</option>
+                <option value="Urgent">Urgent — River bank or pilgrim temple zone</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="lbl_location">Location & Ward in Alandi</label>
+              <div style="display:flex;gap:8px;">
+                <input type="text" id="comp-location" placeholder="e.g. Near Indrayani River Bank, Ward 2" required>
+                <button type="button" class="btn btn-outline-green btn-sm" onclick="captureComplaintLocation()">
+                  <i class="fa-solid fa-location-crosshairs"></i> GPS
+                </button>
+              </div>
+              <small id="complaint-location-status" style="display:block;margin-top:4px;color:var(--text-muted);font-size:0.78rem;"></small>
+              <input type="hidden" id="comp-latitude">
+              <input type="hidden" id="comp-longitude">
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="lbl_desc">Description / Landmark</label>
+              <textarea id="comp-desc" rows="3" placeholder="Provide extra details e.g. next to community bin, corner of street..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-comp-submit">
+              <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_submit_report">Submit Report to Municipality</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab 3: Schedule Pickup -->
+      <div id="tab-pickup" class="tab-content hidden">
+        <h2><i class="fa-solid fa-truck" style="color:var(--secondary);margin-right:8px;"></i> <span data-i18n="tab_schedule_pickup">Schedule Doorstep Pickup</span></h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Book a dedicated municipal compactor van for bulky dry waste, electronic items, or garden trimmings.</p>
+
+        <div class="card" style="max-width:640px;">
+          <form id="pickup-form" onsubmit="submitPickup(event)">
+            <div class="form-group">
+              <label>Waste Material Type</label>
+              <select id="pick-type" required>
+                <option value="Dry">🟡 Dry Recyclables (Cartons, Paper, Metal)</option>
+                <option value="Plastic">🟠 Bulk Plastic / Furniture / Scrap</option>
+                <option value="Hazardous">🔴 E-waste (Batteries, Old Electronics, Appliances)</option>
+                <option value="Wet">🟢 Garden Trimmings & Tree Branches</option>
+                <option value="Other">⚪ Other Bulky Waste</option>
+              </select>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label>Preferred Date</label>
+                <input type="date" id="pick-date" required>
+              </div>
+              <div class="form-group">
+                <label>Time Window</label>
+                <select id="pick-time" required>
+                  <option value="07:30 AM - 09:30 AM">07:30 AM - 09:30 AM</option>
+                  <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                  <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                  <option value="04:30 PM - 06:30 PM">04:30 PM - 06:30 PM</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Doorstep Address in Alandi</label>
+              <textarea id="pick-address" rows="3" placeholder="Building, Flat No., Street, Ward, Alandi" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-pick-submit">
+              <i class="fa-solid fa-calendar-check"></i> <span data-i18n="tab_schedule_pickup">Confirm Doorstep Pickup</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab 4: Submit Event -->
+      <div id="tab-events" class="tab-content hidden">
+        <h2><i class="fa-solid fa-calendar-plus" style="color:var(--primary);margin-right:8px;"></i> <span data-i18n="tab_propose_drive">Propose a Cleanliness Drive</span></h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Organize a weekend riverbank cleanup, tree planting, or zero-plastic awareness rally.</p>
+
+        <div class="card" style="max-width:640px;">
+          <form id="event-form" onsubmit="submitEvent(event)">
+            <div class="form-group">
+              <label>Drive Title</label>
+              <input type="text" id="evt-title" placeholder="e.g. Indrayani Riverbank Ghat Sunday Cleanup" required>
+            </div>
+
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" id="evt-location" placeholder="e.g. Siddhabett Ghat, Ward 2, Alandi" required>
+            </div>
+
+            <div class="form-group">
+              <label>Date of Event</label>
+              <input type="date" id="evt-date" required>
+            </div>
+
+            <div class="form-group">
+              <label>Details & Volunteer Instructions</label>
+              <textarea id="evt-desc" rows="3" placeholder="Explain the goals, meeting point, and required gear..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-paper-plane"></i> Submit Event for Municipal Approval
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    let isLoginMode = true;
+    let currentRole = 'citizen';
+
+    function selectPortalRole(role) {
+      currentRole = role;
+      document.getElementById('tab-btn-citizen').classList.toggle('active', role === 'citizen');
+      document.getElementById('tab-btn-admin').classList.toggle('active', role === 'admin');
+
+      if (role === 'admin') {
+        document.getElementById('auth-email').value = 'admin@swachhsathi.in';
+        document.getElementById('auth-password').value = 'admin123';
+        if (!isLoginMode) toggleAuthMode();
+      } else {
+        document.getElementById('auth-email').value = 'citizen@alandi.in';
+        document.getElementById('auth-password').value = 'citizen123';
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('auth-password');
+      const eyeIcon = document.getElementById('pass-eye-icon');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    function toggleAuthMode() {
+      isLoginMode = !isLoginMode;
+      const titleEl = document.getElementById('auth-title');
+      const btnEl = document.getElementById('auth-btn');
+      const toggleEl = document.getElementById('auth-toggle');
+      const nameGroup = document.getElementById('name-group');
+
+      if (isLoginMode) {
+        titleEl.innerText = t('login_welcome');
+        btnEl.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> ' + t('btn_login');
+        toggleEl.innerText = t('switch_to_register');
+        nameGroup.style.display = 'none';
+      } else {
+        titleEl.innerText = t('btn_register');
+        btnEl.innerHTML = '<i class="fa-solid fa-user-plus"></i> ' + t('btn_register');
+        toggleEl.innerText = t('switch_to_login');
+        nameGroup.style.display = 'block';
+      }
+    }
+
+    function quickDemoLogin(email, password, role) {
+      selectPortalRole(role);
+      document.getElementById('auth-email').value = email;
+      document.getElementById('auth-password').value = password;
+      if (!isLoginMode) toggleAuthMode();
+      document.getElementById('auth-btn').click();
+    }
+
+    function continueAsGuest() {
+      const guestUser = {
+        name: 'Guest Citizen',
+        email: 'citizen@alandi.in',
+        role: 'user'
+      };
+      localStorage.setItem('user', JSON.stringify(guestUser));
+      initDashboard();
+      showToast('Welcome, Guest Citizen! You can now file reports.');
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.reload();
+    }
+
+    function switchDashboardTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      document.getElementById(tabId)?.classList.remove('hidden');
+      document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.sidebar-menu a')).find(a => a.getAttribute('onclick')?.includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const errorDiv = document.getElementById('auth-error');
+      const errorText = document.getElementById('auth-error-text');
+      const authBtn = document.getElementById('auth-btn');
+
+      authBtn.disabled = true;
+      authBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+      try {
+        let res;
+        if (isLoginMode) {
+          res = await api.login(email, password);
+        } else {
+          const name = document.getElementById('auth-name').value || 'Citizen';
+          res = await api.register(name, email, password);
+        }
+
+        if (res.success) {
+          showToast('✅ ' + t('toast_logged_in'));
+          if (res.user?.role === 'admin' && currentRole === 'admin') {
+            window.location.href = 'admin.html';
+          } else {
+            initDashboard();
+          }
+        } else {
+          errorText.innerText = res.error || 'Invalid email or password.';
+          errorDiv.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorText.innerText = t('toast_server_offline');
+        errorDiv.classList.remove('hidden');
+      } finally {
+        authBtn.disabled = false;
+        authBtn.innerHTML = isLoginMode 
+          ? '<i class="fa-solid fa-arrow-right-to-bracket"></i> ' + t('btn_login') 
+          : '<i class="fa-solid fa-user-plus"></i> ' + t('btn_register');
+      }
+    }
+
+    function initDashboard() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+
+      document.getElementById('auth-section').classList.add('hidden');
+      document.getElementById('dashboard-section').classList.remove('hidden');
+      document.getElementById('logout-btn').classList.remove('hidden');
+      document.getElementById('user-name-display').innerText = user.name || 'Citizen';
+
+      if (user.role === 'admin') {
+        document.getElementById('admin-link-container').innerHTML = `
+          <a href="admin.html" class="btn btn-primary" style="display:block;text-align:center;">
+            <i class="fa-solid fa-shield"></i> Open Admin Panel
+          </a>
+        `;
+      }
+
+      loadDashboardData();
+    }
+
+    async function loadDashboardData() {
+      try {
+        const complaints = await api.getComplaints();
+        const pickups = await api.getPickups();
+
+        const resolvedCount = complaints.filter(c => (c.status || '').toLowerCase() === 'resolved').length;
+
+        document.getElementById('my-complaints').innerText = complaints.length;
+        document.getElementById('my-pickups').innerText = pickups.length;
+        document.getElementById('my-resolved').innerText = resolvedCount;
+
+        renderComplaintHistory(complaints);
+      } catch (e) {
+        console.warn('Dashboard data fetch error', e);
+      }
+    }
+
+    function renderComplaintHistory(list) {
+      const container = document.getElementById('my-complaints-list');
+      if (!container) return;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);padding:1rem 0;">No complaints submitted yet. Use "File New Waste Report" to report an issue.</p>';
+        return;
+      }
+
+      container.innerHTML = list.slice(0, 8).map(c => {
+        const normStatus = (c.status || 'Pending').toLowerCase().replace(' ', '-');
+        return `
+          <div class="complaint-history-row">
+            <div>
+              <strong>${c.wasteType || 'General'} Waste Report</strong>
+              <span>📍 ${c.location || 'Alandi'}</span>
+            </div>
+            <div class="complaint-history-meta">
+              <span class="status-pill status-${normStatus}">${c.status || 'Pending'}</span>
+              <small>${new Date(c.createdAt || Date.now()).toLocaleDateString()}</small>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function captureComplaintLocation() {
+      const statusEl = document.getElementById('complaint-location-status');
+      if (!navigator.geolocation) {
+        statusEl.innerText = 'Geolocation not supported by your browser.';
+        return;
+      }
+
+      statusEl.innerText = 'Acquiring GPS coordinates...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(5);
+          const lng = pos.coords.longitude.toFixed(5);
+          document.getElementById('comp-latitude').value = lat;
+          document.getElementById('comp-longitude').value = lng;
+          statusEl.innerText = `GPS attached: ${lat}, ${lng}`;
+          showToast('GPS coordinates attached!');
+        },
+        () => {
+          statusEl.innerText = 'Location permission denied. Please type address.';
+        }
+      );
+    }
+
+    async function submitComplaint(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-comp-submit');
+      submitBtn.disabled = true;
+
+      const data = {
+        wasteType: document.getElementById('comp-type').value,
+        priority: document.getElementById('comp-priority').value,
+        location: document.getElementById('comp-location').value,
+        description: document.getElementById('comp-desc').value,
+        latitude: parseFloat(document.getElementById('comp-latitude').value) || 18.6706,
+        longitude: parseFloat(document.getElementById('comp-longitude').value) || 73.8756
+      };
+
+      try {
+        const res = await api.createComplaint(data);
+        if (res.success) {
+          showToast('✅ ' + t('toast_complaint_success'));
+          e.target.reset();
+          document.getElementById('complaint-location-status').innerText = '';
+          switchDashboardTab('tab-overview');
+          loadDashboardData();
+        } else {
+          showToast('❌ ' + (res.error || 'Failed to submit complaint'), 'error');
+        }
+      } catch (err) {
+        showToast(t('toast_server_offline'), 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    async function submitPickup(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-pick-submit');
+      submitBtn.disabled = true;
+
+      const data = {
+        wasteType: document.getElementById('pick-type').value,
+        date: document.getElementById('pick-date').value,
+        time: document.getElementById('pick-time').value,
+        address: document.getElementById('pick-address').value
+      };
+
+      try {
+        const res = await api.createPickup(data);
+        if (res.success) {
+          showToast('✅ ' + t('toast_pickup_success'));
+          e.target.reset();
+          switchDashboardTab('tab-overview');
+          loadDashboardData();
+        } else {
+          showToast('❌ ' + (res.error || 'Failed to schedule pickup'), 'error');
+        }
+      } catch (err) {
+        showToast(t('toast_server_offline'), 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    async function submitEvent(e) {
+      e.preventDefault();
+      const data = {
+        title: document.getElementById('evt-title').value,
+        location: document.getElementById('evt-location').value,
+        date: document.getElementById('evt-date').value,
+        description: document.getElementById('evt-desc').value
+      };
+
+      try {
+        const res = await api.createEvent(data);
+        if (res.success) {
+          showToast('✅ ' + t('toast_event_success'));
+          e.target.reset();
+          switchDashboardTab('tab-overview');
+        } else {
+          showToast('❌ ' + (res.error || 'Failed to submit event'), 'error');
+        }
+      } catch (err) {
+        showToast(t('toast_server_offline'), 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) initDashboard();
+
+      const datePicker = document.getElementById('pick-date');
+      if (datePicker) {
+        datePicker.min = new Date().toISOString().split('T')[0];
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swachh Sathi – Smart Civic Waste Ecosystem | Alandi</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Custom Modern Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loader-logo"><i class="fa-solid fa-leaf"></i></div>
+    <div class="loader-spinner"></div>
+    <p class="loader-text">Loading Swachh Sathi Alandi...</p>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-leaf"></i> <span data-i18n="brand">Swachh Sathi</span>
+    </a>
+    
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#home" class="active" data-i18n="nav_home">Home</a></li>
+      <li><a href="#how-it-works" data-i18n="nav_how">How It Works</a></li>
+      <li><a href="#ai" data-i18n="nav_ai">AI Segregation</a></li>
+      <li><a href="#map" data-i18n="nav_map">Live Map</a></li>
+      <li><a href="#schedule" data-i18n="nav_schedule">Schedule</a></li>
+      <li><a href="#workers" data-i18n="nav_workers">Ward Heroes</a></li>
+      <li><a href="#events" data-i18n="nav_drives">Drives</a></li>
+      <li><button onclick="openReportModal()" class="btn btn-primary btn-nav"><i class="fa-solid fa-camera"></i> <span data-i18n="nav_report">Report Waste</span></button></li>
+      <li><a href="dashboard.html" class="btn btn-outline-white btn-nav"><i class="fa-solid fa-user"></i> <span data-i18n="nav_dashboard">Dashboard</span></a></li>
+    </ul>
+
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" onclick="setLanguage('mr')">मराठी</button>
+      <button class="lang-btn" onclick="setLanguage('hi')">हिंदी</button>
+    </div>
+
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle Navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero" id="home">
+    <div class="hero-bg-shape"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fa-solid fa-circle-check"></i> <span data-i18n="hero_badge">Alandi Municipal Corporation • Smart Waste Ecosystem</span>
+      </div>
+      <h1 data-i18n="hero_title">Spot Waste in Alandi?<br><span class="gradient-text">Report. Track. Clean.</span></h1>
+      <p data-i18n="hero_subtitle">Directly connects residents, ward supervisors, and cleanup teams. Powered by AI waste segregation and live GPS hotspot tracking for a cleaner, greener Alandi.</p>
+      
+      <div class="hero-actions">
+        <button onclick="openReportModal()" class="btn btn-primary btn-lg">
+          <i class="fa-solid fa-camera"></i> <span data-i18n="btn_report_waste">Report Waste Now</span>
+        </button>
+        <a href="#map" class="btn btn-outline-white btn-lg">
+          <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="btn_explore_map">Explore Live Map</span>
+        </a>
+        <a href="dashboard.html" class="btn btn-outline-white btn-lg">
+          <i class="fa-solid fa-truck"></i> <span data-i18n="btn_book_pickup">Book Doorstep Pickup</span>
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <span><i class="fa-solid fa-shield-halved"></i> <span data-i18n="hero_coverage">100% Ward Coverage</span></span>
+        <span><i class="fa-solid fa-bolt"></i> <span data-i18n="hero_speed">&lt; 24h Average Resolution</span></span>
+        <span><i class="fa-solid fa-users"></i> <span data-i18n="hero_citizens">840+ Active Citizens</span></span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card hc-1">
+        <i class="fa-solid fa-circle-check" style="color:#10b981;font-size:1.1rem;"></i>
+        <span data-i18n="card_resolved">Complaint Resolved · Ward 1</span>
+      </div>
+      <div class="hero-card hc-2">
+        <i class="fa-solid fa-recycle" style="color:#0284c7;font-size:1.1rem;"></i>
+        <span data-i18n="card_nirmalya">Nirmalya Composted · River Ghat</span>
+      </div>
+      <div class="hero-card hc-3">
+        <i class="fa-solid fa-truck-fast" style="color:#f59e0b;font-size:1.1rem;"></i>
+        <span data-i18n="card_pickup">Bulk Pickup On Schedule</span>
+      </div>
+
+      <div class="hero-stat-ring">
+        <div class="ring-inner">
+          <div class="ring-number" id="hero-resolved">843</div>
+          <div class="ring-label" data-i18n="hero_resolved_label">Issues Cleaned<br>& Resolved</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS BAND ===== -->
+  <section class="stats-band">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item">
+          <div><span class="stat-number" data-target="1450">0</span><span class="stat-unit">Kg</span></div>
+          <div class="stat-label" data-i18n="stat_recycled">Waste Diverted & Recycled</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div><span class="stat-number" data-target="843">0</span><span class="stat-unit">+</span></div>
+          <div class="stat-label" data-i18n="stat_reports">Citizen Reports Filed</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div><span class="stat-number" data-target="94">0</span><span class="stat-unit">%</span></div>
+          <div class="stat-label" data-i18n="stat_rate">Civic Resolution Rate</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div><span class="stat-number" data-target="24">0</span><span class="stat-unit">h</span></div>
+          <div class="stat-label" data-i18n="stat_time">Average Response Time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EMERGENCY BANNER ===== -->
+  <div class="emergency-banner">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="emergency-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <strong data-i18n="emergency_title">Hazardous Waste, Toxic Spill, or Open Burning?</strong>
+          <span style="color:rgba(255,255,255,0.85);margin-left:8px;font-size:0.92rem;" data-i18n="emergency_desc">Alandi Municipal Control Room operates 24/7 emergency dispatch.</span>
+        </div>
+      </div>
+      <a href="tel:+912012345678" class="btn btn-white"><i class="fa-solid fa-phone-volume"></i> <span data-i18n="emergency_btn">Emergency: +91 20 1234 5678</span></a>
+    </div>
+  </div>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" data-i18n="how_badge">How It Works</div>
+        <h2 data-i18n="how_title">3 Easy Steps to a <span class="gradient-text">Clean Alandi</span></h2>
+        <p data-i18n="how_subtitle">Civic waste management simplified. No paperwork, no endless waiting.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num" data-i18n="step1_num">STEP 01</div>
+          <div class="step-icon"><i class="fa-solid fa-camera"></i></div>
+          <h3 data-i18n="step1_title">Snap & Report</h3>
+          <p data-i18n="step1_desc">Spot an overflowing bin or roadside dumping? Click "Report Waste" or click on the Live Map to capture location and photo in 15 seconds.</p>
+        </div>
+
+        <div class="step-connector"><i class="fa-solid fa-arrow-right"></i></div>
+
+        <div class="step-card">
+          <div class="step-num" data-i18n="step2_num">STEP 02</div>
+          <div class="step-icon"><i class="fa-solid fa-truck-pickup"></i></div>
+          <h3 data-i18n="step2_title">Ward Team Dispatched</h3>
+          <p data-i18n="step2_desc">Your complaint instantly pings the dedicated sanitation supervisor for that ward. Pickup route is updated dynamically.</p>
+        </div>
+
+        <div class="step-connector"><i class="fa-solid fa-arrow-right"></i></div>
+
+        <div class="step-card">
+          <div class="step-num" data-i18n="step3_num">STEP 03</div>
+          <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <h3 data-i18n="step3_title">Track & Verify</h3>
+          <p data-i18n="step3_desc">Watch status move to "In Progress" and "Resolved" in real-time on the map and your personal citizen dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIVE MAP SECTION (REAL-TIME ALANDI TRACKING) ===== -->
+  <section class="section section-dark" id="map">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" style="background:rgba(52,211,153,0.18);color:#34d399;" data-i18n="map_badge">Live Hotspot Tracking</div>
+        <h2 style="color:#ffffff;" data-i18n="map_title">Alandi Waste <span class="gradient-text">Hotspot & Pickup Map</span></h2>
+        <p data-i18n="map_subtitle">Real-time view of reported waste spots across all wards of Alandi. Click any marker for details, or click on the map to pin a new issue!</p>
+      </div>
+
+      <div class="map-container">
+        <!-- Interactive Map Toolbar -->
+        <div class="map-toolbar">
+          <div class="map-filter-group" id="map-filter-buttons">
+            <button class="map-filter-btn active" data-filter="all"><i class="fa-solid fa-layer-group"></i> <span data-i18n="filter_all">All Hotspots</span> (<span id="count-all">0</span>)</button>
+            <button class="map-filter-btn" data-filter="pending"><span class="legend-dot active"></span> <span data-i18n="filter_pending">Pending</span> (<span id="count-pending">0</span>)</button>
+            <button class="map-filter-btn" data-filter="in progress"><span class="legend-dot inprogress"></span> <span data-i18n="filter_inprogress">In Progress</span> (<span id="count-inprogress">0</span>)</button>
+            <button class="map-filter-btn" data-filter="resolved"><span class="legend-dot resolved"></span> <span data-i18n="filter_resolved">Resolved</span> (<span id="count-resolved">0</span>)</button>
+            <button class="map-filter-btn" data-filter="pickup"><span class="legend-dot pickup"></span> <span data-i18n="filter_pickups">Pickups</span> (<span id="count-pickup">0</span>)</button>
+          </div>
+
+          <div class="map-actions-group">
+            <select id="ward-jump-select" style="width:auto;padding:0.4rem 0.8rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#fff;border-radius:100px;font-size:0.82rem;font-weight:600;outline:none;">
+              <option value="" style="background:#041e15;" data-i18n="map_jump_default">📍 Jump to Location...</option>
+              <option value="18.6706,73.8756" style="background:#041e15;">Temple & Devachi Alandi</option>
+              <option value="18.6680,73.8730" style="background:#041e15;">Indrayani River Ghat</option>
+              <option value="18.6731,73.8762" style="background:#041e15;">Alandi Bus Terminal</option>
+              <option value="18.6718,73.8789" style="background:#041e15;">Market Road & Mandi</option>
+              <option value="18.6742,73.8735" style="background:#041e15;">Dehu Phata Junction</option>
+            </select>
+            <button class="map-locate-btn" onclick="locateUserOnMap()"><i class="fa-solid fa-crosshairs"></i> <span data-i18n="map_locate">Locate Me</span></button>
+          </div>
+        </div>
+
+        <!-- The Leaflet Map Canvas -->
+        <div id="alandi-map"></div>
+
+        <!-- Map Footer Information Bar -->
+        <div class="map-footer-bar">
+          <div>
+            <i class="fa-solid fa-satellite-dish" style="color:#34d399;margin-right:6px;"></i>
+            <span data-i18n="map_footer_info">Connected to Municipal GIS. Click anywhere on the map to drop a pin and report waste.</span>
+          </div>
+          <button onclick="openReportModal()" style="background:none;border:none;color:#34d399;font-weight:700;font-size:0.88rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+            <i class="fa-solid fa-plus-circle"></i> <span data-i18n="btn_report_here">Report Waste Here</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AI SEGREGATION ASSISTANT ===== -->
+  <section class="section" id="ai">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" data-i18n="ai_badge">AI Powered</div>
+        <h2 data-i18n="ai_title">Smart Waste <span class="gradient-text">Segregation Assistant</span></h2>
+        <p data-i18n="ai_subtitle">Unsure which bin to use? Type any common item or click a sample to get instant disposal instructions.</p>
+      </div>
+
+      <div class="ai-wrapper">
+        <div class="ai-card">
+          <div class="ai-input-row">
+            <i class="fa-solid fa-magnifying-glass ai-icon"></i>
+            <input type="text" id="waste-item" data-i18n="ai_placeholder" placeholder="Type item e.g. plastic bottle, coconut shell, medicine...">
+            <button class="btn btn-primary btn-sm" onclick="analyzeWaste()">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="ai_btn_classify">Classify</span>
+            </button>
+          </div>
+
+          <div class="ai-quickchips">
+            <span class="chip-label" data-i18n="ai_quick_label">Quick Suggestions:</span>
+            <button class="chip" onclick="quickAnalyze('Plastic Bottle')"><i class="fa-solid fa-bottle-water"></i> Plastic Bottle</button>
+            <button class="chip" onclick="quickAnalyze('Flower Nirmalya')"><i class="fa-solid fa-spa"></i> Temple Nirmalya</button>
+            <button class="chip" onclick="quickAnalyze('Battery')"><i class="fa-solid fa-car-battery"></i> Battery / E-waste</button>
+            <button class="chip" onclick="quickAnalyze('Banana Peel')"><i class="fa-solid fa-apple-whole"></i> Banana Peel</button>
+            <button class="chip" onclick="quickAnalyze('Cardboard Box')"><i class="fa-solid fa-box"></i> Cardboard Box</button>
+          </div>
+
+          <div id="ai-result" class="ai-result hidden"></div>
+        </div>
+
+        <div class="ai-bins">
+          <div class="bin-card green-bin">
+            <div class="bin-icon"><i class="fa-solid fa-seedling"></i></div>
+            <div>
+              <h4 data-i18n="green_bin_title">Green Bin — Biodegradable & Wet</h4>
+              <p data-i18n="green_bin_desc">Kitchen food scraps, fruit/vegetable peels, leaves, sacred floral Nirmalya for organic composting.</p>
+            </div>
+          </div>
+
+          <div class="bin-card blue-bin">
+            <div class="bin-icon"><i class="fa-solid fa-recycle"></i></div>
+            <div>
+              <h4 data-i18n="blue_bin_title">Blue Bin — Dry Recyclable</h4>
+              <p data-i18n="blue_bin_desc">Paper, flattened cartons, plastic bottles, metal cans, glass jars, dry clean containers.</p>
+            </div>
+          </div>
+
+          <div class="bin-card red-bin">
+            <div class="bin-icon"><i class="fa-solid fa-biohazard"></i></div>
+            <div>
+              <h4 data-i18n="red_bin_title">Red Bin — Domestic Hazardous & E-Waste</h4>
+              <p data-i18n="red_bin_desc">Batteries, expired medicines, broken fluorescent bulbs, syringes, electronic cables.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WEEKLY PICKUP SCHEDULE ===== -->
+  <section class="schedule-section" id="schedule">
+    <div class="container">
+      <div class="schedule-header">
+        <div>
+          <div class="section-badge" style="background:rgba(255,255,255,0.15);color:#fff;" data-i18n="schedule_badge">Doorstep Service</div>
+          <h2 style="color:#ffffff;margin-top:0.4rem;" data-i18n="schedule_title">Weekly Ward Collection Schedule</h2>
+          <p style="color:rgba(255,255,255,0.8);" data-i18n="schedule_subtitle">Fixed municipal compactor truck rounds across all Alandi residential sectors.</p>
+        </div>
+        <a href="dashboard.html" class="btn btn-white">
+          <i class="fa-solid fa-truck"></i> <span data-i18n="btn_schedule_pickup">Schedule Extra Doorstep Pickup</span>
+        </a>
+      </div>
+
+      <div class="schedule-grid" id="weekly-schedule-grid">
+        <div class="schedule-card" id="sch-mon">
+          <div class="sch-day">Mon</div>
+          <div class="sch-info"><strong>Ward 1 & 2</strong><span>Wet + Dry Waste</span></div>
+          <div class="sch-time"><i class="fa-solid fa-clock"></i> 7:00 AM</div>
+        </div>
+        <div class="schedule-card" id="sch-tue">
+          <div class="sch-day">Tue</div>
+          <div class="sch-info"><strong>Ward 3 & 4</strong><span>Wet + Recyclables</span></div>
+          <div class="sch-time"><i class="fa-solid fa-clock"></i> 7:00 AM</div>
+        </div>
+        <div class="schedule-card" id="sch-wed">
+          <div class="sch-day">Wed</div>
+          <div class="sch-info"><strong>Ward 5 & 6</strong><span>All Waste Types</span></div>
+          <div class="sch-time"><i class="fa-solid fa-clock"></i> 7:30 AM</div>
+        </div>
+        <div class="schedule-card" id="sch-thu">
+          <div class="sch-day">Thu</div>
+          <div class="sch-info"><strong>Ward 7 & 8</strong><span>Plastics & Dry</span></div>
+          <div class="sch-time"><i class="fa-solid fa-clock"></i> 7:00 AM</div>
+        </div>
+        <div class="schedule-card" id="sch-fri">
+          <div class="sch-day">Fri</div>
+          <div class="sch-info"><strong>Market Road</strong><span>Commercial Bulk</span></div>
+          <div class="sch-time"><i class="fa-solid fa-clock"></i> 6:00 AM</div>
+        </div>
+        <div class="schedule-card" id="sch-sat">
+          <div class="sch-day">Sat</div>
+          <div class="sch-info"><strong>Temple Corridor</strong><span>Nirmalya Special</span></div>
+          <div class="sch-time"><i class="fa-solid fa-clock"></i> 6:30 AM</div>
+        </div>
+        <div class="schedule-card off-day" id="sch-sun">
+          <div class="sch-day">Sun</div>
+          <div class="sch-info"><strong>Emergency Only</strong><span>Control Room Dispatch</span></div>
+          <div class="sch-time"><i class="fa-solid fa-phone"></i> On-Call</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WARD SANITATION HEROES ===== -->
+  <section class="section section-light" id="workers">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" data-i18n="workers_badge">Municipal Team</div>
+        <h2 data-i18n="workers_title">Your Ward's <span class="gradient-text">Sanitation Heroes</span></h2>
+        <p data-i18n="workers_subtitle">Know your local sanitation supervisor. Reach them directly via phone or WhatsApp for prompt resolution.</p>
+      </div>
+
+      <div class="workers-grid" id="workers-grid">
+        <!-- Loaded dynamically from /api/workers -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== UPCOMING CLEANUP DRIVES ===== -->
+  <section class="section" id="events">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" data-i18n="events_badge">Community Action</div>
+        <h2 data-i18n="events_title">Upcoming <span class="gradient-text">Cleanliness Drives</span></h2>
+        <p data-i18n="events_subtitle">Join fellow citizens and youth groups to preserve Alandi's heritage and the holy Indrayani River.</p>
+      </div>
+
+      <div class="events-grid" id="events-grid">
+        <!-- Loaded dynamically from /api/events -->
+      </div>
+
+      <div style="text-align:center;margin-top:3rem;">
+        <a href="dashboard.html" class="btn btn-outline-green btn-lg">
+          <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="btn_propose_drive">Propose a Community Drive</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CALL TO ACTION ===== -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-text">
+          <h2 data-i18n="cta_title">Notice Garbage on Your Street?</h2>
+          <p data-i18n="cta_desc">Every report you file holds authorities accountable and triggers immediate cleanup. Join 840+ proactive Alandi residents today.</p>
+        </div>
+        <div class="cta-actions">
+          <button onclick="openReportModal()" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-camera"></i> <span data-i18n="cta_report_btn">Report Waste Instantly</span>
+          </button>
+          <a href="dashboard.html" class="btn btn-outline-white btn-lg">
+            <i class="fa-solid fa-user-check"></i> <span data-i18n="cta_dash_btn">Citizen Dashboard</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo"><i class="fa-solid fa-leaf"></i> <span data-i18n="brand">Swachh Sathi</span></div>
+          <p>Smart civic waste management and monitoring ecosystem for Alandi Municipal Corporation. Empowering citizens for a clean, green, and sustainable pilgrimage town.</p>
+          <div class="footer-contact">
+            <a href="tel:+912012345678"><i class="fa-solid fa-phone"></i> +91 20 1234 5678 (Control Room)</a>
+            <a href="mailto:contact@swachhalandi.gov.in"><i class="fa-solid fa-envelope"></i> contact@swachhalandi.gov.in</a>
+          </div>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Quick Links</h4>
+          <a href="#home" data-i18n="nav_home">Home</a>
+          <a href="#how-it-works" data-i18n="nav_how">How It Works</a>
+          <a href="#map" data-i18n="nav_map">Live Hotspot Map</a>
+          <a href="#ai" data-i18n="nav_ai">AI Waste Assistant</a>
+          <a href="#schedule" data-i18n="nav_schedule">Collection Schedule</a>
+          <a href="#workers" data-i18n="nav_workers">Ward Supervisors</a>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Portals</h4>
+          <a href="dashboard.html" data-i18n="nav_dashboard">Citizen Dashboard</a>
+          <a href="dashboard.html" data-i18n="btn_book_pickup">Schedule Doorstep Pickup</a>
+          <a href="admin.html">Municipal Admin Panel</a>
+          <a href="#events" data-i18n="nav_drives">Community Drives</a>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Waste Sorting Guide</h4>
+          <span><span class="dot green-dot"></span> Wet & Nirmalya (Green)</span>
+          <span><span class="dot blue-dot"></span> Dry Recyclables (Blue)</span>
+          <span><span class="dot orange-dot"></span> Plastic Bottles (Orange)</span>
+          <span><span class="dot red-dot"></span> Hazardous & E-Waste (Red)</span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Swachh Sathi • Alandi Municipal Corporation. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Mobile Report Button -->
+  <button onclick="openReportModal()" class="fab-report" title="Report Waste" aria-label="Report Waste">
+    <i class="fa-solid fa-camera"></i>
+  </button>
+
+  <!-- ===== QUICK REPORT MODAL ===== -->
+  <div class="modal-overlay" id="report-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-camera"></i> <span data-i18n="modal_report_title">Report Waste in Alandi</span></h3>
+        <button class="modal-close" onclick="closeReportModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="quick-report-form" onsubmit="submitQuickReport(event)">
+          <div class="form-group">
+            <label data-i18n="lbl_waste_type">Waste Category</label>
+            <select id="qr-waste-type" required>
+              <option value="Plastic" data-i18n="opt_plastic">🟠 Plastic Bottles & Wrappers</option>
+              <option value="Wet" data-i18n="opt_wet">🟢 Wet / Organic / Food Waste</option>
+              <option value="Dry" data-i18n="opt_dry">🟡 Dry / Cardboard / Paper Waste</option>
+              <option value="Hazardous" data-i18n="opt_hazardous">🔴 Hazardous / Broken Glass / Medical</option>
+              <option value="Other" data-i18n="opt_other">⚪ Construction Debris / Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="lbl_location">Location in Alandi</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="qr-location" placeholder="e.g. Near Indrayani Ghat, Ward 2" required>
+              <button type="button" class="btn btn-outline-green btn-sm" onclick="fetchCurrentGPS()" title="Use GPS Location">
+                <i class="fa-solid fa-location-crosshairs"></i> GPS
+              </button>
+            </div>
+            <small id="qr-gps-status" style="display:block;margin-top:4px;color:var(--text-muted);font-size:0.75rem;"></small>
+            <input type="hidden" id="qr-lat">
+            <input type="hidden" id="qr-lng">
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="lbl_priority">Priority</label>
+            <select id="qr-priority">
+              <option value="Normal">Normal — Standard daily cleanup</option>
+              <option value="High">High — Blocking passage / Overflowing</option>
+              <option value="Urgent">Urgent — Hazardous / Near river or temple</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="lbl_desc">Description / Landmark</label>
+            <textarea id="qr-description" rows="2" placeholder="Brief details about the waste accumulation..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;" id="qr-submit-btn">
+            <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_submit_report">Submit Waste Report</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- App Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

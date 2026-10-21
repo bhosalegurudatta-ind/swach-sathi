@@ -1,0 +1,11 @@
+{
+  "name": "swachh-sathi-root",
+  "version": "1.0.0",
+  "description": "Root controller for Swachh Sathi Smart Waste Ecosystem",
+  "scripts": {
+    "install-all": "cd backend && npm install",
+    "build": "cd backend && npm install",
+    "start": "node backend/server.js",
+    "dev": "cd backend && npm run dev"
+  }
+}
