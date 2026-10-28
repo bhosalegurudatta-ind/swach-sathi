@@ -35,13 +35,36 @@ router.post('/register', async (req, res) => {
 
 // @route   POST /api/auth/login
 router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ success: false, error: 'Please provide an email and password' });
+  if (!email || !password) {
+    return res.status(400).json({ success: false, error: 'Please provide an email and password' });
+  }
+
+  // Graceful fallback for demo accounts if DB connection is disconnected
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState !== 1) {
+    if (email === 'admin@swachhsathi.in' && password === 'admin123') {
+      const jwt = require('jsonwebtoken');
+      const token = jwt.sign({ id: 'mock-admin-id', role: 'admin' }, process.env.JWT_SECRET || 'swachh_jwt_secret_2026', { expiresIn: '30d' });
+      return res.status(200).json({
+        success: true,
+        token,
+        user: { _id: 'mock-admin-id', name: 'Municipal Admin', email: 'admin@swachhsathi.in', role: 'admin' }
+      });
     }
+    if (email === 'citizen@alandi.in' && password === 'citizen123') {
+      const jwt = require('jsonwebtoken');
+      const token = jwt.sign({ id: 'mock-citizen-id', role: 'user' }, process.env.JWT_SECRET || 'swachh_jwt_secret_2026', { expiresIn: '30d' });
+      return res.status(200).json({
+        success: true,
+        token,
+        user: { _id: 'mock-citizen-id', name: 'Aarav Patil', email: 'citizen@alandi.in', role: 'user' }
+      });
+    }
+  }
 
+  try {
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
