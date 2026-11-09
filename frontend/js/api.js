@@ -76,6 +76,15 @@ const api = {
   },
 
   // --- COMPLAINTS ---
+  trackComplaint: async (idOrQuery) => {
+    try {
+      const res = await fetch(`${API_URL}/complaints/track/${encodeURIComponent(idOrQuery)}`);
+      return await res.json();
+    } catch (e) {
+      return { success: false, error: 'Network error while tracking grievance.' };
+    }
+  },
+
   getMapHotspots: async () => {
     try {
       const res = await fetch(`${API_URL}/complaints/map`);

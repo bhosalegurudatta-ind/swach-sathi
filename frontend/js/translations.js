@@ -4,6 +4,63 @@
 
 const translations = {
   en: {
+    // Official Government Portal Elements
+    gov_state: "Government of Maharashtra",
+    gov_mc_name: "Alandi Municipal Council",
+    gov_district: "District Pune",
+    gov_helpline: "Toll-Free Helpline: 1800-233-5678",
+    gov_sbm_tag: "Swachh Bharat Mission (Urban 2.0)",
+    gov_sbm_sub: "Ministry of Housing & Urban Affairs",
+    gov_btn_track: "Track Grievance",
+    gov_btn_citizen_login: "Citizen Login",
+    gov_btn_admin_login: "Official Staff",
+    gov_btn_services: "Citizen Services",
+
+    // Marquee Notice Ticker
+    ticker_tag: "Official Notice",
+    ticker_item1: "Complete ban on single-use plastics across Alandi Temple precinct and Indrayani Ghat. Heavy fines under SWM Bylaws.",
+    ticker_item2: "Special Nirmalya (sacred floral waste) collection active daily at Siddhabett & Indrayani River steps for sacred composting.",
+    ticker_item3: "Doorstep segregated waste collection (Wet / Dry) mandatory for all households and commercial establishments under SWM Rules 2016.",
+
+    // Citizen Services Hub
+    services_hub_badge: "e-Governance Portal",
+    services_hub_title: "Civic Waste Services <span class='gradient-text'>for All Citizens</span>",
+    services_hub_subtitle: "Access official municipal waste services directly. Fast, transparent, and accessible without mandatory prior login.",
+    serv1_title: "File Waste Grievance",
+    serv1_desc: "Report garbage heaps, overflowing bins, or dumping with GPS coordinates in 15 seconds.",
+    serv2_title: "Track Grievance Status",
+    serv2_desc: "Check live dispatch status, assigned officer, and cleanup verification with your complaint token.",
+    serv3_title: "Live Ward GIS Map",
+    serv3_desc: "Transparent public GIS map displaying cleared vs active hotspots across all 6 wards.",
+    serv4_title: "Ghanta Gadi Timetable",
+    serv4_desc: "Fixed door-to-door compactor routes and daily collection timings for each residential sector.",
+    serv5_title: "Ward Officers Directory",
+    serv5_desc: "Direct official phone and WhatsApp contacts for all 6 ward municipal sanitation supervisors.",
+    serv6_title: "AI Segregation Assistant",
+    serv6_desc: "Instant guidance for sorting Wet, Dry, and Domestic Hazardous waste per SWM Rules 2016.",
+    serv7_title: "Bulk & Nirmalya Pickup",
+    serv7_desc: "Doorstep service for bulk temple floral offerings, dharamshalas, warkari pandals, and societies.",
+    serv8_title: "Citizen Charter & RTI",
+    serv8_desc: "Service level guarantees (4h–24h) under Maharashtra Right to Public Services Act 2015.",
+    serv_btn_access: "Access Service",
+
+    // Public Grievance Tracker
+    tracker_badge: "Real-Time Tracking",
+    tracker_title: "Public Grievance <span class='gradient-text'>Tracker</span>",
+    tracker_subtitle: "Track the real-time progress of any reported civic waste issue across Alandi without logging in.",
+    tracker_input_ph: "Enter Complaint ID (e.g. c1, c2, c3 or location keyword)...",
+    tracker_btn_search: "Search & Track",
+    tracker_sample_label: "Try Sample Grievances:",
+
+    // Citizen Charter SLA Table
+    charter_badge: "Service Guarantee",
+    charter_title: "Citizen Charter & <span class='gradient-text'>Service Level Commitments</span>",
+    charter_subtitle: "Time-bound municipal delivery under Maharashtra Right to Public Services Act 2015.",
+    th_service: "Civic Waste Service",
+    th_designated_officer: "Designated Ward Officer",
+    th_sla: "Max Time Limit (SLA)",
+    th_first_appeal: "Appellate Authority",
+
     // Brand & Navigation
     brand: "Swachh Sathi",
     nav_home: "Home",
@@ -171,6 +228,63 @@ const translations = {
   },
 
   mr: {
+    // Official Government Portal Elements
+    gov_state: "महाराष्ट्र शासन",
+    gov_mc_name: "आळंदी नगरपरिषद",
+    gov_district: "जिल्हा पुणे",
+    gov_helpline: "टोल-फ्री हेल्पलाइन: १८००-२३३-५६७८",
+    gov_sbm_tag: "स्वच्छ भारत अभियान (नागरी २.०)",
+    gov_sbm_sub: "गृहनिर्माण आणि नागरी व्यवहार मंत्रालय",
+    gov_btn_track: "तक्रार ट्रॅक करा",
+    gov_btn_citizen_login: "नागरिक लॉगिन",
+    gov_btn_admin_login: "अधिकारी लॉगिन",
+    gov_btn_services: "नागरिक सेवा",
+
+    // Marquee Notice Ticker
+    ticker_tag: "अधिकृत सूचना",
+    ticker_item1: "आळंदी मंदिर परिसर व इंद्रायणी नदी घाटावर एकल-वापर प्लास्टिकवर पूर्ण बंदी. घनकचरा उपविधीनुसार दंडात्मक कारवाई लागू.",
+    ticker_item2: "सिद्धबेट व इंद्रायणी नदी पायऱ्यांवर दररोज सेंद्रिय खतासाठी विशेष निर्माल्य संकलन सुरू आहे.",
+    ticker_item3: "घनकचरा व्यवस्थापन नियम २०१६ अंतर्गत सर्व घरे व आस्थापनांसाठी ओला व सुका कचरा वर्गीकरण बंधनकारक आहे.",
+
+    // Citizen Services Hub
+    services_hub_badge: "ई-प्रशासन दालन",
+    services_hub_title: "नागरिकांसाठी <span class='gradient-text'>सार्वजनिक कचरा सेवा</span>",
+    services_hub_subtitle: "आळंदी नगरपरिषदेच्या अधिकृत कचरा व्यवस्थापन सेवा थेट वापरा. लॉगिन न करताही पारदर्शक व जलद सुविधा.",
+    serv1_title: "कचरा तक्रार नोंदवा",
+    serv1_desc: "रस्त्यावरील कचरा, तुंबलेले डस्टबिन किंवा अस्वच्छतेचे फोटो व GPS सह १५ सेकंदात तक्रार करा.",
+    serv2_title: "तक्रारीची स्थिती तपासा",
+    serv2_desc: "आपल्या तक्रार क्रमांकावरून प्रत्यक्ष कामाची प्रगती, नियुक्त पर्यवेक्षक आणि वेळेची माहिती घ्या.",
+    serv3_title: "थेट प्रभाग GIS नकाशा",
+    serv3_desc: "आळंदीतील सर्व ६ प्रभागांमधील स्वच्छ व प्रलंबित ठिकाणे दर्शविणारा थेट नकाशा.",
+    serv4_title: "घंटागाडी वेळापत्रक",
+    serv4_desc: "आपल्या प्रभागातील कचरा संकलन गाडीचे आगमन व दररोजचे फिरतीचे निश्चित वेळापत्रक.",
+    serv5_title: "प्रभाग अधिकारी संपर्क",
+    serv5_desc: "माहितीच्या अधिकारांतर्गत सर्व ६ प्रभागांच्या स्वच्छता पर्यवेक्षकांचे थेट संपर्क क्रमांक व व्हॉट्सॲप.",
+    serv6_title: "AI कचरा वर्गीकरण",
+    serv6_desc: "घनकचरा नियम २०१६ नुसार ओला, सुका आणि घातक कचरा योग्य डस्टबिनमध्ये टाकण्यासाठी मार्गदर्शक.",
+    serv7_title: "मोठा कचरा व निर्माल्य संकलन",
+    serv7_desc: "मंदिरे, धर्मशाळा, वारकरी मंडळे आणि गृहनिर्माण सोसायट्यांसाठी विशेष घरपोच कचरा संकलन.",
+    serv8_title: "नागरिक सनद व माहिती अधिकार",
+    serv8_desc: "महाराष्ट्र लोकसेवा हक्क अधिनियम २०१५ अंतर्गत ४ ते २४ तासांत तक्रार निवारणाची हमी.",
+    serv_btn_access: "सेवा वापरा",
+
+    // Public Grievance Tracker
+    tracker_badge: "थेट मागोवा",
+    tracker_title: "सार्वजनिक तक्रार <span class='gradient-text'>निवारण ट्रॅकर</span>",
+    tracker_subtitle: "नोंदणी किंवा लॉगिन न करता आळंदीतील कोणत्याही कचरा तक्रारीची चालू स्थिती थेट तपासा.",
+    tracker_input_ph: "तक्रार क्रमांक टाका (उदा. c1, c2, c3 किंवा परिसराचे नाव)...",
+    tracker_btn_search: "तपासा आणि ट्रॅक करा",
+    tracker_sample_label: "नमुना तक्रार तपासा:",
+
+    // Citizen Charter SLA Table
+    charter_badge: "सेवा हमी",
+    charter_title: "नागरिक सनद व <span class='gradient-text'>सेवा कालमर्यादा हमी</span>",
+    charter_subtitle: "महाराष्ट्र लोकसेवा हक्क अधिनियम २०१५ अंतर्गत वेळबद्ध नागरी कचरा निवारण.",
+    th_service: "नागरी कचरा सेवा",
+    th_designated_officer: "नियुक्त प्रभाग अधिकारी",
+    th_sla: "कमाल कालमर्यादा (SLA)",
+    th_first_appeal: "प्रथम अपील अधिकारी",
+
     // Brand & Navigation
     brand: "स्वच्छ साथी",
     nav_home: "मुख्यपृष्ठ",
@@ -338,6 +452,63 @@ const translations = {
   },
 
   hi: {
+    // Official Government Portal Elements
+    gov_state: "महाराष्ट्र शासन",
+    gov_mc_name: "आळंदी नगर परिषद",
+    gov_district: "जिला पुणे",
+    gov_helpline: "टोल-फ्री हेल्पलाइन: 1800-233-5678",
+    gov_sbm_tag: "स्वच्छ भारत मिशन (शहरी 2.0)",
+    gov_sbm_sub: "आवासन और शहरी कार्य मंत्रालय",
+    gov_btn_track: "शिकायत ट्रैक करें",
+    gov_btn_citizen_login: "नागरिक लॉगिन",
+    gov_btn_admin_login: "अधिकारी लॉगिन",
+    gov_btn_services: "नागरिक सेवाएं",
+
+    // Marquee Notice Ticker
+    ticker_tag: "आधिकारिक सूचना",
+    ticker_item1: "आळंदी मंदिर क्षेत्र और इंद्रायणी नदी घाट पर सिंगल-यूज प्लास्टिक पूर्णतः प्रतिबंधित है। नियम उल्लंघन पर जुर्माना लागू।",
+    ticker_item2: "सिद्धबेट और इंद्रायणी नदी घाट पर प्रतिदिन जैविक खाद हेतु विशेष निर्माल्य (पुष्प अपशिष्ट) एकत्र किया जा रहा है।",
+    ticker_item3: "ठोस अपशिष्ट प्रबंधन नियम 2016 के तहत सभी घरों और प्रतिष्ठानों के लिए गीला और सूखा कचरा अलग करना अनिवार्य है।",
+
+    // Citizen Services Hub
+    services_hub_badge: "ई-गवर्नेंस पोर्टल",
+    services_hub_title: "नागरिकों हेतु <span class='gradient-text'>सार्वजनिक कचरा सेवाएं</span>",
+    services_hub_subtitle: "आळंदी नगर परिषद की आधिकारिक कचरा प्रबंधन सेवाओं का सीधे उपयोग करें। बिना लॉगिन भी पारदर्शी और त्वरित समाधान।",
+    serv1_title: "कचरा शिकायत दर्ज करें",
+    serv1_desc: "सड़क पर कचरा, भरे हुए डस्टबिन या गंदगी की GPS फोटो के साथ 15 सेकंड में शिकायत करें।",
+    serv2_title: "शिकायत की स्थिति जांचें",
+    serv2_desc: "अपने शिकायत टोकन से समाधान की लाइव प्रगति, नियुक्त पर्यवेक्षक और समय सीमा देखें।",
+    serv3_title: "लाइव वार्ड GIS मैप",
+    serv3_desc: "आळंदी के सभी 6 वार्डों में स्वच्छ और लंबित क्षेत्रों को प्रदर्शित करने वाला सार्वजनिक नक्शा।",
+    serv4_title: "डोरस्टेप कचरा गाड़ी समय सारणी",
+    serv4_desc: "अपने वार्ड में कंपैक्टर वाहन के आगमन और दैनिक कचरा संग्रहण का निश्चित समय देखें।",
+    serv5_title: "वार्ड स्वच्छता अधिकारी संपर्क",
+    serv5_desc: "सूचना का अधिकार के तहत सभी 6 वार्डों के नगर स्वच्छता पर्यवेक्षकों के सीधे मोबाइल और व्हाट्सएप संपर्क।",
+    serv6_title: "AI कचरा पृथक्करण सहायक",
+    serv6_desc: "ठोस अपशिष्ट नियम 2016 के अनुसार गीला, सूखा और हानिकारक कचरा सही डस्टबिन में डालने का मार्गदर्शन।",
+    serv7_title: "बल्क एवं निर्माल्य उठाव सेवा",
+    serv7_desc: "मंदिरों, धर्मशालाओं, वारकरी पांडालों और सोसायटियों हेतु विशेष डोरस्टेप कचरा संग्रहण।",
+    serv8_title: "नागरिक अधिकार पत्र एवं RTI",
+    serv8_desc: "महाराष्ट्र लोकसेवा अधिकार अधिनियम 2015 के अंतर्गत 4 से 24 घंटे में शिकायत समाधान की गारंटी।",
+    serv_btn_access: "सेवा का उपयोग करें",
+
+    // Public Grievance Tracker
+    tracker_badge: "लाइव ट्रैकिंग",
+    tracker_title: "सार्वजनिक शिकायत <span class='gradient-text'>ट्रैकर</span>",
+    tracker_subtitle: "बिना लॉगिन किए आळंदी में दर्ज किसी भी कचरा शिकायत की वर्तमान स्थिति तुरंत जांचें।",
+    tracker_input_ph: "शिकायत संदर्भ संख्या दर्ज करें (जैसे c1, c2, c3 या स्थान का नाम)...",
+    tracker_btn_search: "खोजें और ट्रैक करें",
+    tracker_sample_label: "नमूना शिकायत जांचें:",
+
+    // Citizen Charter SLA Table
+    charter_badge: "सेवा गारंटी",
+    charter_title: "नागरिक अधिकार पत्र एवं <span class='gradient-text'>समयबद्ध सेवा गारंटी</span>",
+    charter_subtitle: "महाराष्ट्र लोकसेवा अधिकार अधिनियम 2015 के तहत निर्धारित समय सीमा में समाधान।",
+    th_service: "नागरिक कचरा सेवा",
+    th_designated_officer: "नामित वार्ड अधिकारी",
+    th_sla: "अधिकतम समय सीमा (SLA)",
+    th_first_appeal: "प्रथम अपीलीय अधिकारी",
+
     // Brand & Navigation
     brand: "स्वच्छ साथी",
     nav_home: "होम",

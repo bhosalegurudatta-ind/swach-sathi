@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swachh Sathi – Smart Civic Waste Ecosystem | Alandi</title>
+  <title>Swachh Sathi – Official Civic Waste Management Portal | Alandi Municipal Council</title>
   
   <!-- Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,101 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- Navigation Bar -->
+  <!-- ===== 1. NATIONAL TRICOLOR TOP STRIP ===== -->
+  <div class="gov-tricolor-strip"></div>
+
+  <!-- ===== 2. OFFICIAL GOVERNMENT TOPBAR & ACCESSIBILITY ===== -->
+  <div class="gov-topbar">
+    <div class="gov-topbar-left">
+      <span class="gov-entity-name">
+        <i class="fa-solid fa-landmark-dome" style="color:#f59e0b;"></i>
+        <strong data-i18n="gov_state">Government of Maharashtra</strong>
+      </span>
+      <span class="gov-divider-dot">•</span>
+      <span style="color:#cbd5e1;" data-i18n="gov_mc_name">Alandi Municipal Council</span>
+      <span class="gov-divider-dot">•</span>
+      <span style="color:#94a3b8;" data-i18n="gov_district">District Pune</span>
+    </div>
+
+    <div class="gov-topbar-right">
+      <a href="tel:18002335678" class="gov-helpline-link" title="Call Municipal Toll-Free Helpline">
+        <i class="fa-solid fa-phone-volume"></i> <span data-i18n="gov_helpline">Toll-Free Helpline: 1800-233-5678</span>
+      </a>
+
+      <!-- Accessibility text resizer & contrast -->
+      <div class="gov-accessibility-controls" title="Screen Accessibility Controls">
+        <button onclick="changeFontSize(-1)" title="Decrease Text Size" aria-label="Decrease text size">A-</button>
+        <button onclick="resetFontSize()" title="Reset Text Size" aria-label="Default text size">A</button>
+        <button onclick="changeFontSize(1)" title="Increase Text Size" aria-label="Increase text size">A+</button>
+        <button onclick="toggleHighContrast()" title="Toggle High Contrast Mode" aria-label="Toggle contrast"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="lang-selector" style="margin:0;">
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('mr')">मराठी</button>
+        <button class="lang-btn" onclick="setLanguage('hi')">हिंदी</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 3. OFFICIAL GOVERNMENT BRANDING & PORTAL HEADER ===== -->
+  <header class="gov-branding-header">
+    <div class="gov-branding-left">
+      <div class="gov-emblem-badge">
+        <div class="gov-emblem-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="gov-titles">
+          <span class="gov-marathi-title">आळंदी नगरपरिषद</span>
+          <span class="gov-english-sub">Alandi Municipal Council</span>
+          <span class="gov-dept-sub">Department of Municipal Administration, Public Health & Solid Waste Management</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gov-branding-right">
+      <!-- Swachh Bharat Mission Badge -->
+      <div class="gov-sbm-badge">
+        <div class="sbm-logo-icon">
+          <i class="fa-solid fa-glasses"></i>
+        </div>
+        <div class="gov-sbm-text">
+          <span data-i18n="gov_sbm_tag">Swachh Bharat Mission (Urban 2.0)</span>
+          <span data-i18n="gov_sbm_sub">Ministry of Housing & Urban Affairs</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons for Citizens & Staff -->
+      <div class="gov-header-actions" id="gov-auth-actions">
+        <a href="#tracker" class="btn-gov-outline">
+          <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="gov_btn_track">Track Grievance</span>
+        </a>
+        <a href="dashboard.html" class="btn-gov-primary" id="gov-login-btn">
+          <i class="fa-solid fa-user-check"></i> <span data-i18n="gov_btn_citizen_login">Citizen Login</span>
+        </a>
+        <a href="admin.html" class="btn-gov-dark" title="Municipal Staff & Officer Login">
+          <i class="fa-solid fa-user-shield"></i> <span data-i18n="gov_btn_admin_login">Official Staff</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 4. OFFICIAL NOTICE & CIRCULARS TICKER ===== -->
+  <div class="gov-notice-ticker">
+    <div class="ticker-tag">
+      <i class="fa-solid fa-bullhorn"></i> <span data-i18n="ticker_tag">Official Notice</span>
+    </div>
+    <div class="ticker-marquee">
+      <div class="ticker-inner">
+        <span><i class="fa-solid fa-circle-exclamation"></i> <span data-i18n="ticker_item1">Complete ban on single-use plastics across Alandi Temple precinct and Indrayani Ghat. Heavy fines under SWM Bylaws.</span></span>
+        <span><i class="fa-solid fa-spa"></i> <span data-i18n="ticker_item2">Special Nirmalya (sacred floral waste) collection active daily at Siddhabett & Indrayani River steps for sacred composting.</span></span>
+        <span><i class="fa-solid fa-truck-moving"></i> <span data-i18n="ticker_item3">Doorstep segregated waste collection (Wet / Dry) mandatory for all households and commercial establishments under SWM Rules 2016.</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 5. CIVIC NAVIGATION BAR ===== -->
   <nav class="navbar" id="navbar">
     <a href="index.html" class="logo">
       <i class="fa-solid fa-leaf"></i> <span data-i18n="brand">Swachh Sathi</span>
@@ -39,46 +133,41 @@
     
     <ul class="nav-links" id="nav-links">
       <li><a href="#home" class="active" data-i18n="nav_home">Home</a></li>
-      <li><a href="#how-it-works" data-i18n="nav_how">How It Works</a></li>
-      <li><a href="#ai" data-i18n="nav_ai">AI Segregation</a></li>
-      <li><a href="#map" data-i18n="nav_map">Live Map</a></li>
-      <li><a href="#schedule" data-i18n="nav_schedule">Schedule</a></li>
-      <li><a href="#workers" data-i18n="nav_workers">Ward Heroes</a></li>
-      <li><a href="#events" data-i18n="nav_drives">Drives</a></li>
+      <li><a href="#services" data-i18n="gov_btn_services">Citizen Services</a></li>
+      <li><a href="#tracker" data-i18n="gov_btn_track">Track Grievance</a></li>
+      <li><a href="#map" data-i18n="nav_map">Live GIS Map</a></li>
+      <li><a href="#schedule" data-i18n="nav_schedule">Timetable</a></li>
+      <li><a href="#ai" data-i18n="nav_ai">AI Sorting</a></li>
+      <li><a href="#workers" data-i18n="nav_workers">Ward Officers</a></li>
+      <li><a href="#charter" data-i18n="charter_badge">Citizen Charter</a></li>
       <li><button onclick="openReportModal()" class="btn btn-primary btn-nav"><i class="fa-solid fa-camera"></i> <span data-i18n="nav_report">Report Waste</span></button></li>
-      <li><a href="dashboard.html" class="btn btn-outline-white btn-nav"><i class="fa-solid fa-user"></i> <span data-i18n="nav_dashboard">Dashboard</span></a></li>
+      <li id="nav-dashboard-li"><a href="dashboard.html" class="btn btn-outline-white btn-nav" id="nav-dashboard-link"><i class="fa-solid fa-user"></i> <span data-i18n="nav_dashboard">Dashboard</span></a></li>
     </ul>
-
-    <div class="lang-selector">
-      <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-      <button class="lang-btn" onclick="setLanguage('mr')">मराठी</button>
-      <button class="lang-btn" onclick="setLanguage('hi')">हिंदी</button>
-    </div>
 
     <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle Navigation">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- ===== HERO SECTION ===== -->
+  <!-- ===== 6. GOVERNMENT HERO SECTION ===== -->
   <section class="hero" id="home">
     <div class="hero-bg-shape"></div>
     <div class="hero-content">
       <div class="hero-badge">
-        <i class="fa-solid fa-circle-check"></i> <span data-i18n="hero_badge">Alandi Municipal Corporation • Smart Waste Ecosystem</span>
+        <i class="fa-solid fa-landmark"></i> <span data-i18n="hero_badge">Alandi Municipal Council • Smart Waste Ecosystem</span>
       </div>
       <h1 data-i18n="hero_title">Spot Waste in Alandi?<br><span class="gradient-text">Report. Track. Clean.</span></h1>
-      <p data-i18n="hero_subtitle">Directly connects residents, ward supervisors, and cleanup teams. Powered by AI waste segregation and live GPS hotspot tracking for a cleaner, greener Alandi.</p>
+      <p data-i18n="hero_subtitle">Directly connects residents, pilgrims, ward supervisors, and municipal cleanup teams. Powered by AI waste segregation and live GPS hotspot tracking for a cleaner, greener holy pilgrimage town.</p>
       
       <div class="hero-actions">
-        <button onclick="openReportModal()" class="btn btn-primary btn-lg">
+        <button onclick="openReportModal()" class="btn btn-primary btn-lg" style="box-shadow: 0 8px 24px rgba(5,150,105,0.4);">
           <i class="fa-solid fa-camera"></i> <span data-i18n="btn_report_waste">Report Waste Now</span>
         </button>
+        <a href="#tracker" class="btn btn-outline-white btn-lg">
+          <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="gov_btn_track">Track Grievance</span>
+        </a>
         <a href="#map" class="btn btn-outline-white btn-lg">
           <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="btn_explore_map">Explore Live Map</span>
-        </a>
-        <a href="dashboard.html" class="btn btn-outline-white btn-lg">
-          <i class="fa-solid fa-truck"></i> <span data-i18n="btn_book_pickup">Book Doorstep Pickup</span>
         </a>
       </div>
 
@@ -112,34 +201,198 @@
     </div>
   </section>
 
-  <!-- ===== STATS BAND ===== -->
+  <!-- ===== 7. SWACHH SURVEKSHAN CIVIC METRICS ===== -->
   <section class="stats-band">
     <div class="container">
       <div class="stats-row">
         <div class="stat-item">
           <div><span class="stat-number" data-target="1450">0</span><span class="stat-unit">Kg</span></div>
-          <div class="stat-label" data-i18n="stat_recycled">Waste Diverted & Recycled</div>
+          <div class="stat-label" data-i18n="stat_recycled">Waste Diverted & Recycled Daily</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <div><span class="stat-number" data-target="843">0</span><span class="stat-unit">+</span></div>
-          <div class="stat-label" data-i18n="stat_reports">Citizen Reports Filed</div>
+          <div class="stat-label" data-i18n="stat_reports">Citizen Reports Resolved</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <div><span class="stat-number" data-target="94">0</span><span class="stat-unit">%</span></div>
-          <div class="stat-label" data-i18n="stat_rate">Civic Resolution Rate</div>
+          <div class="stat-label" data-i18n="stat_rate">Civic Resolution Success Rate</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <div><span class="stat-number" data-target="24">0</span><span class="stat-unit">h</span></div>
-          <div class="stat-label" data-i18n="stat_time">Average Response Time</div>
+          <div class="stat-label" data-i18n="stat_time">Average Response Time Guarantee</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== EMERGENCY BANNER ===== -->
+  <!-- ===== 8. PUBLIC GRIEVANCE TRACKER (NO LOGIN REQUIRED) ===== -->
+  <section class="section" id="tracker" style="background:#f1f5f9;padding:3.5rem 0;">
+    <div class="container">
+      <div class="public-tracker-card">
+        <div class="tracker-header">
+          <div class="section-badge" style="background:rgba(52,211,153,0.18);color:#34d399;" data-i18n="tracker_badge">Real-Time Tracking</div>
+          <h2 data-i18n="tracker_title">Public Grievance <span class="gradient-text">Tracker</span></h2>
+          <p data-i18n="tracker_subtitle">Track the real-time progress of any reported civic waste issue across Alandi without logging in.</p>
+        </div>
+
+        <form class="tracker-search-box" onsubmit="trackPublicComplaint(event)">
+          <input type="text" id="tracker-id-input" data-i18n="tracker_input_ph" placeholder="Enter Complaint ID (e.g. c1, c2, c3 or location keyword)..." required>
+          <button type="submit" id="tracker-search-btn">
+            <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="tracker_btn_search">Search & Track</span>
+          </button>
+        </form>
+
+        <div class="tracker-sample-pills">
+          <span data-i18n="tracker_sample_label">Try Sample Grievances:</span>
+          <button type="button" onclick="quickTrack('c1')"><i class="fa-solid fa-bus"></i> c1 (Bus Terminal)</button>
+          <button type="button" onclick="quickTrack('c2')"><i class="fa-solid fa-water"></i> c2 (Indrayani River)</button>
+          <button type="button" onclick="quickTrack('c3')"><i class="fa-solid fa-store"></i> c3 (Market Road)</button>
+          <button type="button" onclick="quickTrack('c4')"><i class="fa-solid fa-triangle-exclamation"></i> c4 (Old Alandi Road)</button>
+        </div>
+
+        <!-- Rendered Results Box -->
+        <div id="tracker-result-area" class="tracker-result-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. CITIZEN SERVICES HUB (FOR ALL RESIDENTS & PILGRIMS) ===== -->
+  <section class="citizen-services-section" id="services">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" data-i18n="services_hub_badge">e-Governance Portal</div>
+        <h2 data-i18n="services_hub_title">Civic Waste Services <span class="gradient-text">for All Citizens</span></h2>
+        <p data-i18n="services_hub_subtitle">Access official municipal waste services directly. Fast, transparent, and accessible without mandatory prior login.</p>
+      </div>
+
+      <div class="services-hub-grid">
+        <!-- Service 1: File Grievance -->
+        <div class="service-hub-card" onclick="openReportModal()" style="cursor:pointer;">
+          <div class="service-hub-icon"><i class="fa-solid fa-camera"></i></div>
+          <h3 data-i18n="serv1_title">File Waste Grievance</h3>
+          <p data-i18n="serv1_desc">Report garbage heaps, overflowing bins, or dumping with GPS coordinates in 15 seconds.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">Report Now</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+
+        <!-- Service 2: Track Status -->
+        <a href="#tracker" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-timeline"></i></div>
+          <h3 data-i18n="serv2_title">Track Grievance Status</h3>
+          <p data-i18n="serv2_desc">Check live dispatch status, assigned officer, and cleanup verification with your complaint token.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">Track Now</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Service 3: Live GIS Map -->
+        <a href="#map" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+          <h3 data-i18n="serv3_title">Live Ward GIS Map</h3>
+          <p data-i18n="serv3_desc">Transparent public GIS map displaying cleared vs active hotspots across all 6 wards.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">Open Map</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Service 4: Ghanta Gadi Timetable -->
+        <a href="#schedule" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-truck-moving"></i></div>
+          <h3 data-i18n="serv4_title">Ghanta Gadi Timetable</h3>
+          <p data-i18n="serv4_desc">Fixed door-to-door compactor routes and daily collection timings for each residential sector.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">View Schedule</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Service 5: Know Your Officer -->
+        <a href="#workers" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-id-card-clip"></i></div>
+          <h3 data-i18n="serv5_title">Ward Officers Directory</h3>
+          <p data-i18n="serv5_desc">Direct official phone and WhatsApp contacts for all 6 ward municipal sanitation supervisors.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">Contact Officers</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Service 6: AI Segregation Guide -->
+        <a href="#ai" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <h3 data-i18n="serv6_title">AI Segregation Assistant</h3>
+          <p data-i18n="serv6_desc">Instant guidance for sorting Wet, Dry, and Domestic Hazardous waste per SWM Rules 2016.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">Test Assistant</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Service 7: Bulk & Temple Waste -->
+        <a href="dashboard.html" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-spa"></i></div>
+          <h3 data-i18n="serv7_title">Bulk & Nirmalya Pickup</h3>
+          <p data-i18n="serv7_desc">Doorstep service for bulk temple floral offerings, dharamshalas, warkari pandals, and societies.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">Book Pickup</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- Service 8: Citizen Charter & RTI -->
+        <a href="#charter" class="service-hub-card">
+          <div class="service-hub-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+          <h3 data-i18n="serv8_title">Citizen Charter & RTI</h3>
+          <p data-i18n="serv8_desc">Service level guarantees (4h–24h) under Maharashtra Right to Public Services Act 2015.</p>
+          <span class="service-hub-action"><span data-i18n="serv_btn_access">View Charter</span> <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 10. CITIZEN CHARTER & SLA COMMITMENTS TABLE ===== -->
+  <section class="charter-section" id="charter">
+    <div class="container">
+      <div class="section-title">
+        <div class="section-badge" data-i18n="charter_badge">Service Guarantee</div>
+        <h2 data-i18n="charter_title">Citizen Charter & <span class="gradient-text">Service Level Commitments</span></h2>
+        <p data-i18n="charter_subtitle">Time-bound municipal delivery under Maharashtra Right to Public Services Act 2015.</p>
+      </div>
+
+      <div class="charter-table-wrap">
+        <table class="charter-table">
+          <thead>
+            <tr>
+              <th data-i18n="th_service">Civic Waste Service</th>
+              <th data-i18n="th_designated_officer">Designated Ward Officer</th>
+              <th data-i18n="th_sla">Max Time Limit (SLA)</th>
+              <th data-i18n="th_first_appeal">Appellate Authority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Roadside Garbage Accumulation / Dumping</strong></td>
+              <td>Respective Ward Sanitation Supervisor</td>
+              <td><span class="sla-badge green"><i class="fa-solid fa-clock"></i> 12 Hours</span></td>
+              <td>Sanitary Inspector, Alandi MC</td>
+            </tr>
+            <tr>
+              <td><strong>Overflowing Municipal Community Bins</strong></td>
+              <td>Zone Compactor Route In-Charge</td>
+              <td><span class="sla-badge green"><i class="fa-solid fa-clock"></i> 6 Hours</span></td>
+              <td>Sanitary Inspector, Alandi MC</td>
+            </tr>
+            <tr>
+              <td><strong>Hazardous / Broken Glass / Medical Debris</strong></td>
+              <td>Emergency Cleanliness Wing Lead</td>
+              <td><span class="sla-badge red"><i class="fa-solid fa-triangle-exclamation"></i> 4 Hours</span></td>
+              <td>Chief Officer, Alandi Municipal Council</td>
+            </tr>
+            <tr>
+              <td><strong>Sacred Indrayani River Nirmalya Clearance</strong></td>
+              <td>Ghat & Pilgrim Corridor Officer</td>
+              <td><span class="sla-badge green"><i class="fa-solid fa-spa"></i> Same Day (Daily 3x)</span></td>
+              <td>Sanitary Inspector, Alandi MC</td>
+            </tr>
+            <tr>
+              <td><strong>Bulk Doorstep Waste Pickup Request</strong></td>
+              <td>Dry & Bulk Waste Operations Lead</td>
+              <td><span class="sla-badge amber"><i class="fa-solid fa-calendar-check"></i> On Scheduled Date</span></td>
+              <td>Chief Officer, Alandi Municipal Council</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 11. EMERGENCY 24/7 HELPLINE BANNER ===== -->
   <div class="emergency-banner">
     <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
       <div style="display:flex;align-items:center;gap:14px;">
@@ -153,7 +406,7 @@
     </div>
   </div>
 
-  <!-- ===== HOW IT WORKS ===== -->
+  <!-- ===== 12. HOW IT WORKS ===== -->
   <section class="section" id="how-it-works">
     <div class="container">
       <div class="section-title">
@@ -191,7 +444,7 @@
     </div>
   </section>
 
-  <!-- ===== LIVE MAP SECTION (REAL-TIME ALANDI TRACKING) ===== -->
+  <!-- ===== 13. LIVE GIS MAP SECTION ===== -->
   <section class="section section-dark" id="map">
     <div class="container">
       <div class="section-title">
@@ -241,13 +494,13 @@
     </div>
   </section>
 
-  <!-- ===== AI SEGREGATION ASSISTANT ===== -->
+  <!-- ===== 14. AI SEGREGATION ASSISTANT ===== -->
   <section class="section" id="ai">
     <div class="container">
       <div class="section-title">
         <div class="section-badge" data-i18n="ai_badge">AI Powered</div>
         <h2 data-i18n="ai_title">Smart Waste <span class="gradient-text">Segregation Assistant</span></h2>
-        <p data-i18n="ai_subtitle">Unsure which bin to use? Type any common item or click a sample to get instant disposal instructions.</p>
+        <p data-i18n="ai_subtitle">Unsure which bin to use? Type any common item or click a sample to get instant disposal instructions compliant with Solid Waste Management Rules 2016.</p>
       </div>
 
       <div class="ai-wrapper">
@@ -301,7 +554,7 @@
     </div>
   </section>
 
-  <!-- ===== WEEKLY PICKUP SCHEDULE ===== -->
+  <!-- ===== 15. WEEKLY PICKUP SCHEDULE ===== -->
   <section class="schedule-section" id="schedule">
     <div class="container">
       <div class="schedule-header">
@@ -355,7 +608,7 @@
     </div>
   </section>
 
-  <!-- ===== WARD SANITATION HEROES ===== -->
+  <!-- ===== 16. WARD SANITATION HEROES & SUPERVISORS ===== -->
   <section class="section section-light" id="workers">
     <div class="container">
       <div class="section-title">
@@ -365,12 +618,12 @@
       </div>
 
       <div class="workers-grid" id="workers-grid">
-        <!-- Loaded dynamically from /api/workers -->
+        <!-- Loaded dynamically from /api/workers with authentic Indian profile photos -->
       </div>
     </div>
   </section>
 
-  <!-- ===== UPCOMING CLEANUP DRIVES ===== -->
+  <!-- ===== 17. UPCOMING CLEANUP DRIVES ===== -->
   <section class="section" id="events">
     <div class="container">
       <div class="section-title">
@@ -391,7 +644,7 @@
     </div>
   </section>
 
-  <!-- ===== CALL TO ACTION ===== -->
+  <!-- ===== 18. CALL TO ACTION ===== -->
   <section class="cta-section">
     <div class="container">
       <div class="cta-inner">
@@ -411,48 +664,75 @@
     </div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- ===== 19. OFFICIAL GOVERNMENT COMPLIANCE FOOTER ===== -->
   <footer>
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-          <div class="footer-logo"><i class="fa-solid fa-leaf"></i> <span data-i18n="brand">Swachh Sathi</span></div>
-          <p>Smart civic waste management and monitoring ecosystem for Alandi Municipal Corporation. Empowering citizens for a clean, green, and sustainable pilgrimage town.</p>
+          <div class="footer-logo"><i class="fa-solid fa-landmark"></i> <span>Alandi Municipal Council</span></div>
+          <p>Official Solid Waste Management & Citizen Grievance Redressal Portal under Swachh Bharat Mission (Urban 2.0), Department of Urban Development, Government of Maharashtra.</p>
           <div class="footer-contact">
-            <a href="tel:+912012345678"><i class="fa-solid fa-phone"></i> +91 20 1234 5678 (Control Room)</a>
-            <a href="mailto:contact@swachhalandi.gov.in"><i class="fa-solid fa-envelope"></i> contact@swachhalandi.gov.in</a>
+            <p style="color:#cbd5e1;font-size:0.85rem;margin-bottom:6px;">
+              <i class="fa-solid fa-location-dot" style="color:#34d399;"></i> 
+              Municipal Council Office, Sant Dnyaneshwar Maharaj Sansthan Marg, Alandi Devachi, Taluka Khed, District Pune - 412105
+            </p>
+            <a href="tel:18002335678"><i class="fa-solid fa-phone"></i> 1800-233-5678 (Toll-Free Control Room)</a>
+            <a href="mailto:chief_officer@alandimc.gov.in"><i class="fa-solid fa-envelope"></i> chief_officer@alandimc.gov.in</a>
           </div>
         </div>
 
         <div class="footer-links-group">
-          <h4>Quick Links</h4>
-          <a href="#home" data-i18n="nav_home">Home</a>
-          <a href="#how-it-works" data-i18n="nav_how">How It Works</a>
-          <a href="#map" data-i18n="nav_map">Live Hotspot Map</a>
+          <h4>Citizen Services</h4>
+          <a href="#services" data-i18n="gov_btn_services">Citizen Services Hub</a>
+          <a href="#tracker" data-i18n="gov_btn_track">Track Grievance Status</a>
+          <a href="#map" data-i18n="nav_map">Live Hotspot GIS Map</a>
           <a href="#ai" data-i18n="nav_ai">AI Waste Assistant</a>
           <a href="#schedule" data-i18n="nav_schedule">Collection Schedule</a>
           <a href="#workers" data-i18n="nav_workers">Ward Supervisors</a>
         </div>
 
         <div class="footer-links-group">
-          <h4>Portals</h4>
-          <a href="dashboard.html" data-i18n="nav_dashboard">Citizen Dashboard</a>
-          <a href="dashboard.html" data-i18n="btn_book_pickup">Schedule Doorstep Pickup</a>
-          <a href="admin.html">Municipal Admin Panel</a>
-          <a href="#events" data-i18n="nav_drives">Community Drives</a>
+          <h4>Government Portals</h4>
+          <a href="dashboard.html" data-i18n="nav_dashboard">Citizen Login / Portal</a>
+          <a href="admin.html">Municipal Staff & Admin Panel</a>
+          <a href="https://swachhbharaturban.gov.in" target="_blank" rel="noopener">Swachh Bharat Urban (MoHUA)</a>
+          <a href="https://maharashtra.gov.in" target="_blank" rel="noopener">Government of Maharashtra</a>
+          <a href="https://pune.gov.in" target="_blank" rel="noopener">Pune District Administration</a>
+          <a href="https://india.gov.in" target="_blank" rel="noopener">National Portal of India</a>
         </div>
 
         <div class="footer-links-group">
           <h4>Waste Sorting Guide</h4>
-          <span><span class="dot green-dot"></span> Wet & Nirmalya (Green)</span>
-          <span><span class="dot blue-dot"></span> Dry Recyclables (Blue)</span>
+          <span><span class="dot green-dot"></span> Wet & Nirmalya (Green Bin)</span>
+          <span><span class="dot blue-dot"></span> Dry Recyclables (Blue Bin)</span>
           <span><span class="dot orange-dot"></span> Plastic Bottles (Orange)</span>
-          <span><span class="dot red-dot"></span> Hazardous & E-Waste (Red)</span>
+          <span><span class="dot red-dot"></span> Hazardous & E-Waste (Red Bin)</span>
         </div>
       </div>
 
+      <!-- Legal & RTI Compliance Bar -->
+      <div class="gov-compliance-footer">
+        <div class="gov-footer-links">
+          <a href="#charter">Citizen Charter (नागरिक सनद)</a>
+          <span>•</span>
+          <a href="tel:18002335678">Right to Public Services Act (RTS)</a>
+          <span>•</span>
+          <a href="mailto:rti@alandimc.gov.in">Right to Information (RTI 2005)</a>
+          <span>•</span>
+          <a href="#">Privacy Policy</a>
+          <span>•</span>
+          <a href="#">Terms of Use</a>
+          <span>•</span>
+          <a href="#">Web Information Manager</a>
+        </div>
+        <p class="gov-disclaimer-text">
+          Content on this portal is published and managed by Alandi Municipal Council (आळंदी नगरपरिषद), Government of Maharashtra.<br>
+          For any query regarding this portal, please contact the Nodal Information Officer at Alandi Municipal Council.
+        </p>
+      </div>
+
       <div class="footer-bottom">
-        <p>&copy; 2026 Swachh Sathi • Alandi Municipal Corporation. All rights reserved.</p>
+        <p>&copy; 2026 Alandi Municipal Council, Government of Maharashtra. All rights reserved. Powered by Swachh Sathi Civic Tech.</p>
       </div>
     </div>
   </footer>
@@ -462,7 +742,7 @@
     <i class="fa-solid fa-camera"></i>
   </button>
 
-  <!-- ===== QUICK REPORT MODAL ===== -->
+  <!-- ===== QUICK REPORT MODAL (NO LOGIN REQUIRED) ===== -->
   <div class="modal-overlay" id="report-modal">
     <div class="modal-box">
       <div class="modal-header">

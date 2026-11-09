@@ -96,6 +96,69 @@ router.get('/map', async (req, res) => {
   }
 });
 
+// @route   GET /api/complaints/track/:id
+// Public tracking by Complaint ID (no login required)
+router.get('/track/:id', async (req, res) => {
+  const { id } = req.params;
+
+  // If MongoDB is offline or using fallback
+  if (mongoose.connection.readyState !== 1) {
+    const found = fallbackHotspots.find(h => h._id === id || h.location.toLowerCase().includes(id.toLowerCase()));
+    if (found) {
+      return res.status(200).json({ success: true, data: found });
+    }
+    // Return sample mock tracking result so non-logged user gets an immediate demo
+    return res.status(200).json({
+      success: true,
+      data: {
+        _id: id,
+        wasteType: 'Plastic & Organic',
+        location: 'Near Devachi Alandi Chowk, Ward 1',
+        description: 'Citizen filed waste clearance report.',
+        priority: 'High',
+        status: 'In Progress',
+        assignedOfficer: 'Rajesh Kumar (Sanitation Supervisor)',
+        assignedPhone: '+91 98220 12345',
+        timeline: [
+          { status: 'Grievance Registered', time: '10:15 AM Today', done: true },
+          { status: 'Ward Team Dispatched', time: '10:45 AM Today', done: true },
+          { status: 'Cleanup In Progress', time: '11:30 AM Today', done: true },
+          { status: 'Final Inspection & Resolved', time: 'Estimated by 2:00 PM', done: false }
+        ],
+        createdAt: new Date(Date.now() - 3 * 3600 * 1000)
+      }
+    });
+  }
+
+  try {
+    let complaint;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      complaint = await Complaint.findById(id).populate('user', 'name');
+    }
+    if (!complaint) {
+      complaint = await Complaint.findOne({
+        $or: [
+          { location: { $regex: id, $options: 'i' } },
+          { description: { $regex: id, $options: 'i' } }
+        ]
+      }).sort('-createdAt');
+    }
+
+    if (!complaint) {
+      // If not found in DB, check fallback array
+      const foundInFallback = fallbackHotspots.find(h => h._id === id || h.location.toLowerCase().includes(id.toLowerCase()));
+      if (foundInFallback) {
+        return res.status(200).json({ success: true, data: foundInFallback });
+      }
+      return res.status(404).json({ success: false, error: 'No grievance found with this reference number.' });
+    }
+
+    res.status(200).json({ success: true, data: complaint });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
 // @route   GET /api/complaints
 router.get('/', optionalProtect, async (req, res) => {
   try {

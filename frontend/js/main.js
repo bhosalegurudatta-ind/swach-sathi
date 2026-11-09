@@ -638,8 +638,193 @@ function rsvpEvent(title) {
   showToast(`🎉 Thank you for volunteering for "${title}"! See you there.`);
 }
 
+// ===== ACCESSIBILITY TOOLBAR =====
+let currentFontSize = 16;
+function changeFontSize(delta) {
+  currentFontSize = Math.min(22, Math.max(13, currentFontSize + delta));
+  document.documentElement.style.fontSize = `${currentFontSize}px`;
+}
+function resetFontSize() {
+  currentFontSize = 16;
+  document.documentElement.style.fontSize = '16px';
+}
+function toggleHighContrast() {
+  document.body.classList.toggle('high-contrast');
+}
+
+// ===== PUBLIC GRIEVANCE TRACKER (NO LOGIN REQUIRED) =====
+async function trackPublicComplaint(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('tracker-id-input');
+  const resultArea = document.getElementById('tracker-result-area');
+  const btn = document.getElementById('tracker-search-btn');
+  if (!input || !resultArea) return;
+
+  const query = input.value.trim();
+  if (!query) {
+    showToast('⚠️ Please enter a Complaint ID or location.');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Tracking...';
+  }
+
+  try {
+    const res = await api.trackComplaint(query);
+    if (!res || !res.success || !res.data) {
+      resultArea.innerHTML = `
+        <div style="text-align:center;padding:1.5rem;color:#dc2626;">
+          <i class="fa-solid fa-circle-exclamation" style="font-size:2rem;margin-bottom:0.5rem;"></i>
+          <h4>Grievance Reference Not Found</h4>
+          <p style="color:#64748b;font-size:0.88rem;margin-top:0.4rem;">
+            No active record found for "${query}". Try one of the sample references below or file a fresh waste report.
+          </p>
+        </div>
+      `;
+      resultArea.classList.add('active');
+      return;
+    }
+
+    const data = res.data;
+    const isResolved = (data.status || '').toLowerCase() === 'resolved';
+    const isInProgress = (data.status || '').toLowerCase() === 'in progress';
+    const isPending = (data.status || '').toLowerCase() === 'pending' || !data.status;
+
+    let step1 = 'completed';
+    let step2 = isInProgress || isResolved ? 'completed' : 'active';
+    let step3 = isResolved ? 'completed' : (isInProgress ? 'active' : '');
+    let step4 = isResolved ? 'completed active' : '';
+
+    resultArea.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;border-bottom:1px solid #e2e8f0;padding-bottom:1rem;">
+        <div>
+          <span style="background:#e0f2fe;color:#0284c7;font-weight:800;font-size:0.75rem;padding:3px 10px;border-radius:50px;text-transform:uppercase;">
+            REF: ${data._id || query}
+          </span>
+          <h3 style="margin-top:0.4rem;font-size:1.25rem;color:#0f172a;">${data.location}</h3>
+          <p style="color:#64748b;font-size:0.88rem;margin-top:2px;">
+            <i class="fa-solid fa-recycle" style="color:#059669;"></i> Category: <strong>${data.wasteType || 'General Waste'}</strong> &nbsp;|&nbsp; 
+            Priority: <strong>${data.priority || 'Normal'}</strong>
+          </p>
+        </div>
+        <div style="text-align:right;">
+          <span style="display:inline-block;padding:6px 14px;border-radius:50px;font-weight:800;font-size:0.82rem;
+            ${isResolved ? 'background:#dcfce7;color:#15803d;' : (isInProgress ? 'background:#fef3c7;color:#b45309;' : 'background:#fee2e2;color:#b91c1c;')}">
+            <i class="fa-solid fa-circle" style="font-size:0.6rem;margin-right:4px;"></i> Status: ${data.status || 'Pending'}
+          </span>
+          <div style="font-size:0.75rem;color:#94a3b8;margin-top:4px;">
+            Filed on: ${new Date(data.createdAt || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </div>
+        </div>
+      </div>
+
+      <!-- Resolution Progress Stepper -->
+      <div class="stepper-container">
+        <div class="step-node ${step1}">
+          <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="step-label">1. Registered</div>
+          <div class="step-sub">Logged in Municipal GIS</div>
+        </div>
+        <div class="step-node ${step2}">
+          <div class="step-circle">${step2 === 'completed' ? '<i class="fa-solid fa-check"></i>' : '2'}</div>
+          <div class="step-label">2. Assigned</div>
+          <div class="step-sub">Ward Supervisor Dispatched</div>
+        </div>
+        <div class="step-node ${step3}">
+          <div class="step-circle">${step3 === 'completed' ? '<i class="fa-solid fa-check"></i>' : '3'}</div>
+          <div class="step-label">3. In Progress</div>
+          <div class="step-sub">Compactor Crew On-Site</div>
+        </div>
+        <div class="step-node ${step4}">
+          <div class="step-circle">${isResolved ? '<i class="fa-solid fa-check-double"></i>' : '4'}</div>
+          <div class="step-label">4. Cleaned & Closed</div>
+          <div class="step-sub">${isResolved ? 'Verified with Photo' : 'SLA: Under 24h'}</div>
+        </div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem;margin-top:1rem;">
+        <div style="font-size:0.88rem;color:#334155;">
+          <i class="fa-solid fa-user-shield" style="color:#059669;margin-right:6px;"></i>
+          Assigned Supervisor: <strong>${data.assignedOfficer || 'Rajesh Kumar (Ward 1 Supervisor)'}</strong>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="tel:+919822012345" class="btn btn-outline-green btn-sm"><i class="fa-solid fa-phone"></i> Contact Officer</a>
+          <button onclick="highlightHotspotOnMap('${data.latitude || 18.6731}', '${data.longitude || 73.8762}')" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-location-crosshairs"></i> View on GIS Map
+          </button>
+        </div>
+      </div>
+    `;
+
+    resultArea.classList.add('active');
+    resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch (err) {
+    showToast('Failed to retrieve grievance data.');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="tracker_btn_search">Search & Track</span>';
+    }
+  }
+}
+
+function quickTrack(refId) {
+  const input = document.getElementById('tracker-id-input');
+  if (input) {
+    input.value = refId;
+    trackPublicComplaint();
+  }
+}
+
+function highlightHotspotOnMap(lat, lng) {
+  const mapSection = document.getElementById('map');
+  if (mapSection) {
+    mapSection.scrollIntoView({ behavior: 'smooth' });
+    if (window.alandiMap && lat && lng) {
+      window.alandiMap.flyTo([Number(lat), Number(lng)], 17, { duration: 1.5 });
+    }
+  }
+}
+
+// Check logged in user status and update header
+function checkUserSession() {
+  const userStr = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+  const user = userStr ? JSON.parse(userStr) : null;
+
+  const authActionsEl = document.getElementById('gov-auth-actions');
+  const navDashboardLink = document.getElementById('nav-dashboard-link');
+
+  if (user && token && authActionsEl) {
+    authActionsEl.innerHTML = `
+      <div style="display:inline-flex;align-items:center;gap:8px;">
+        <span style="font-size:0.8rem;color:#044e39;font-weight:700;">
+          <i class="fa-solid fa-circle-user" style="color:#059669;"></i> ${user.name}
+        </span>
+        <a href="dashboard.html" class="btn-gov-primary" style="padding:0.35rem 0.75rem;font-size:0.78rem;">
+          <i class="fa-solid fa-gauge"></i> Dashboard
+        </a>
+        <button onclick="handleMainLogout()" class="btn-gov-outline" style="padding:0.35rem 0.65rem;font-size:0.75rem;border-color:#cbd5e1;color:#64748b;">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    `;
+  }
+}
+
+function handleMainLogout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.reload();
+}
+
 // ===== APPLICATION INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
+  // Check session
+  checkUserSession();
+
   // Init map
   initAlandiMap();
 
