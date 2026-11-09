@@ -1689,9 +1689,303 @@ input::placeholder, textarea::placeholder {
 }
 
 /* ==========================================================================
-   OFFICIAL GOVERNMENT CIVIC PORTAL DESIGN SYSTEM
-   Government of Maharashtra • Alandi Municipal Council (आळंदी नगरपरिषद)
+   LANDING PAGE (FOR NON-LOGGED-IN USERS) & LOGGED-IN PORTAL TOGGLE
    ========================================================================== */
+
+#landing-page-view {
+  display: block;
+}
+
+#logged-in-app-view {
+  display: none;
+}
+
+/* Landing Page Hero */
+.landing-hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 60%),
+              radial-gradient(circle at 10% 85%, rgba(2, 132, 199, 0.12) 0%, transparent 50%),
+              linear-gradient(180deg, #041e15 0%, #03140e 100%);
+  color: #ffffff;
+  padding: 120px 0 80px;
+  overflow: hidden;
+}
+
+.landing-hero-content {
+  max-width: 720px;
+  z-index: 2;
+}
+
+.landing-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.landing-hero h1 {
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  letter-spacing: -1px;
+}
+
+.landing-hero p {
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin-bottom: 2.2rem;
+}
+
+.landing-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.btn-landing-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.9rem 1.8rem;
+  background: #059669;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(5, 150, 105, 0.35);
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-landing-primary:hover {
+  background: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(5, 150, 105, 0.45);
+}
+
+.btn-landing-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.9rem 1.6rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.btn-landing-demo:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+  border-color: #34d399;
+}
+
+.btn-landing-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.9rem 1.4rem;
+  background: transparent;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+.btn-landing-admin:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.landing-trust-strip {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+}
+.landing-trust-strip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;
+}
+.landing-trust-strip span i {
+  color: #10b981;
+}
+
+/* Landing Pillars Grid */
+.landing-section {
+  padding: 5rem 0;
+}
+
+.landing-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.landing-pillar-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.landing-pillar-card:hover {
+  transform: translateY(-6px);
+  border-color: #10b981;
+  box-shadow: 0 12px 30px rgba(5, 150, 105, 0.12);
+}
+
+.landing-pillar-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+.pillar-green { background: #dcfce7; color: #059669; }
+.pillar-blue  { background: #e0f2fe; color: #0284c7; }
+.pillar-amber { background: #fef3c7; color: #d97706; }
+.pillar-purple { background: #f3e8ff; color: #7c3aed; }
+
+.landing-pillar-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.6rem;
+}
+
+.landing-pillar-card p {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* Landing Action Showcase */
+.landing-cta-banner {
+  background: linear-gradient(135deg, #059669 0%, #047857 50%, #064e3b 100%);
+  border-radius: 24px;
+  padding: 4rem 3rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  box-shadow: 0 20px 45px rgba(5, 150, 105, 0.25);
+  margin: 3rem 0;
+}
+
+.landing-cta-banner h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+}
+
+.landing-cta-banner p {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.05rem;
+  max-width: 600px;
+}
+
+/* Logged-in User Chip inside App Navbar */
+.logged-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  font-size: 0.84rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+.logged-user-chip .user-avatar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34d399;
+}
+
+.btn-logout-pill {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-logout-pill:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+@media (max-width: 1024px) {
+  .landing-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .landing-hero h1 {
+    font-size: 2.6rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+  .landing-hero h1 {
+    font-size: 2.1rem;
+  }
+  .landing-cta-banner {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    justify-content: center;
+  }
+}
 
 /* National Tricolor Top Strip */
 .gov-tricolor-strip {

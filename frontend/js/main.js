@@ -788,53 +788,83 @@ function highlightHotspotOnMap(lat, lng) {
   }
 }
 
-// Check logged in user status and update header
-function checkUserSession() {
+// ===== LANDING PAGE / NORMAL WEBSITE STATE CONTROLLER =====
+let isMapInitialized = false;
+
+function checkUserViewState() {
   const userStr = localStorage.getItem('user');
   const token = localStorage.getItem('token');
   const user = userStr ? JSON.parse(userStr) : null;
+  const isLogged = !!(user && (token || user.email));
 
-  const authActionsEl = document.getElementById('gov-auth-actions');
-  const navDashboardLink = document.getElementById('nav-dashboard-link');
+  const landingView = document.getElementById('landing-page-view');
+  const appView = document.getElementById('logged-in-app-view');
 
-  if (user && token && authActionsEl) {
-    authActionsEl.innerHTML = `
-      <div style="display:inline-flex;align-items:center;gap:8px;">
-        <span style="font-size:0.8rem;color:#044e39;font-weight:700;">
-          <i class="fa-solid fa-circle-user" style="color:#059669;"></i> ${user.name}
-        </span>
-        <a href="dashboard.html" class="btn-gov-primary" style="padding:0.35rem 0.75rem;font-size:0.78rem;">
-          <i class="fa-solid fa-gauge"></i> Dashboard
-        </a>
-        <button onclick="handleMainLogout()" class="btn-gov-outline" style="padding:0.35rem 0.65rem;font-size:0.75rem;border-color:#cbd5e1;color:#64748b;">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-        </button>
-      </div>
-    `;
+  if (isLogged) {
+    // Show Full Normal Website
+    if (landingView) landingView.style.display = 'none';
+    if (appView) {
+      appView.style.display = 'block';
+      
+      // Update Logged-in greeting
+      const userBadge = document.getElementById('app-user-greeting');
+      if (userBadge) {
+        userBadge.innerHTML = `
+          <div class="logged-user-chip">
+            <span class="user-avatar-dot"></span>
+            <span>${user.name || 'Citizen'}</span>
+            <small style="color:#94a3b8;font-size:0.75rem;">(${user.role === 'admin' ? 'Admin' : 'Ward Citizen'})</small>
+          </div>
+        `;
+      }
+
+      // Initialize map & data if not already done
+      if (!isMapInitialized) {
+        setTimeout(() => {
+          initAlandiMap();
+          isMapInitialized = true;
+        }, 100);
+      }
+      loadWorkers();
+      loadEvents();
+      initAnimatedCounters();
+      highlightCurrentDay();
+    }
+  } else {
+    // Show ONLY Landing Page for non-logged-in persons
+    if (landingView) landingView.style.display = 'block';
+    if (appView) appView.style.display = 'none';
   }
 }
 
-function handleMainLogout() {
-  localStorage.removeItem('token');
+function landingQuickDemo(role = 'user') {
+  if (role === 'admin') {
+    const adminUser = { _id: 'mock-admin-id', name: 'Municipal Admin', email: 'admin@swachhsathi.in', role: 'admin' };
+    localStorage.setItem('user', JSON.stringify(adminUser));
+    localStorage.setItem('token', 'demo-admin-token');
+    showToast('🛡️ Logged in as Municipal Admin! Welcome to Swachh Sathi.');
+  } else {
+    const citizenUser = { _id: 'mock-citizen-id', name: 'Aarav Patil', email: 'citizen@alandi.in', role: 'user' };
+    localStorage.setItem('user', JSON.stringify(citizenUser));
+    localStorage.setItem('token', 'demo-citizen-token');
+    showToast('🌿 Welcome, Aarav Patil! You are now viewing the full Swachh Sathi portal.');
+  }
+  checkUserViewState();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function logoutToLanding() {
   localStorage.removeItem('user');
-  window.location.reload();
+  localStorage.removeItem('token');
+  showToast('ℹ️ Logged out. Returned to Swachh Sathi Landing Page.');
+  checkUserViewState();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ===== APPLICATION INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
-  // Check session
-  checkUserSession();
-
-  // Init map
-  initAlandiMap();
-
-  // Load backend content
-  loadWorkers();
-  loadEvents();
-
-  // Init UI helpers
-  initAnimatedCounters();
-  highlightCurrentDay();
+  // Determine if visitor is logged in or needs landing page
+  checkUserViewState();
 
   // AI input Enter key
   const aiInput = document.getElementById('waste-item');
